@@ -1,0 +1,95 @@
+.container{
+    width: 100%;
+    height: 600px;
+    background-color: lightgray;
+    display: flex;
+    /* flex-wrap: nowrap; así está por defecto*/
+    /* Para que esten en la misma fila */
+    /* flex-wrap: wrap; Las cajitas se van acomodando una tras una */
+    /* flex-direction: row-reverse; Para mostrarse al revés */
+    /* flex-direction: column; Se van hacia abajo, depende del height */
+    flex-direction: row;
+    /* align-items: center; Se centran los elementos en el centro */
+    /* align-items: flex-end; Se va al final */
+    /* align-items: center; Esto es por defecto, se va al inicio */
+    /* justify-content: center; Align item trabaja verticalmente, justify  
+    content trabaja de manera horizontal  */
+    /* justify-content: space-between; Todos los elementos se reparten a
+    lo largo de la fila*/
+    /* align-content: flex-end; la diferencia de align item  */
+   /* align-content: space-around; Todo los elementos juntos se centran, a
+    diferencia del align item, que se centraban cada una de las filas 
+    referente a su espacio que ocupa, pero align item centra todos los 
+    elementos */
+    /*align-content: space-between; Repartir todos elementos a los lados 
+    y los elementos que sobran hacia el centro de forma equitativa*/
+}
+
+.caja{
+    width: 80px;
+    height: 80px;
+    border: solid 1px black;
+    text-align: center;
+    line-height: 60px;
+    margin: 10px;
+}
+
+.caja1{
+    background-color: green;
+    /* order: 1; */
+}
+
+
+.caja2{
+    background-color: red;
+    /* order: 4;  order es utilizado para escoger el orden de los elementos*/
+    flex-grow: 1;
+    /* Tiene mayor derecho a ocupar más espacio en la fila*/
+    /* Es como una jerarquia, entre más alto sea el grow, tiene más prioridad */
+    flex-shrink: 0; /*Ya no puede disminuir más su tamaño, su tamaño minimo es el que tiene
+    por defecto ()*/
+}
+
+.caja3{
+    background-color: rgb(79, 62, 234);
+    /* order: 3; */
+
+}
+
+.caja4{
+    background-color: rgb(255, 238, 3);
+    /* order: 5; */
+    /* flex-grow: 2; */
+    /**/
+
+}
+
+.caja5{
+    background-color: rgb(187, 6, 6);
+    /* order: 2; */
+
+}
+
+
+
+.caja6{
+    background-color: rgb(216, 146, 26);
+}
+
+.caja7{
+    background-color: rgb(4, 242, 0);
+}
+
+.caja8{
+    background-color: rgb(242, 145, 0);
+}
+
+.caja9{
+    background-color: rgb(0, 174, 255);
+}
+
+.caja10{
+    background-color: rgb(242, 0, 234);
+}
+
+

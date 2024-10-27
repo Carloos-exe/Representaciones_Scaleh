@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Representaciones</title>
+    <link rel="stylesheet" type="text/css" href="/styles/style.css">
+    <link rel="stylesheet" type="text/css" href="/styles/stylesContent.css">
+    
+    <script src="https://kit.fontawesome.com/67c66657c7.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <input type="checkbox" id="check">
+    
+    <nav>
+        
+        <div class="icon">Representaciones  <b style="color: black;">Scaleh</b></div>
+        <div class="search_box">.
+            <input type="search" placeholder="Buscar Productos">
+            <span class="fa fa-search"></span>
+            
+        </div>
+        <ol>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/descuentos">Descuentos</a></li>
+            <li><a href="/productos">Productos</a>
+                <ul>
+                    <li><a href="#">Construcción</a></li>
+                    <li><a href="#">Fontanería</a></li>
+                    <li><a href="#">Electricidad</a></li>
+                    <li><a href="#">Cisternas</a></li>
+                    <li><a href="#">Tubería</a></li>
+                </ul>
+            </li>
+            <li><a href="/login">Registrate</a></li>
+        </ol>      
+        <label for="check" class="bar">
+            <span class="fa fa-bars" id="bars"></span>
+            <span class="fa fa-times" id="times"> </span>
+        </label>
+    </nav>
+    <section>
+    </section>
+    <p>Descuentos</p>
+
+   <!-- Contenedor del chatbot -->
+<link rel="stylesheet" href="chatbot.css">
+<div class="chat-container" id="chatContainer">
+    <div class="chat-header">
+        <h2>Asistente Virtual</h2>
+    </div>
+    <div class="chat-body" id="chat-body">
+        <div class="bot-message">
+            <p>Hola, ¿cómo te puedo ayudar hoy?</p>
+        </div>
+    </div>
+    <div class="chat-footer">
+        <button id="option1">Precios</button>
+        <button id="option2">Horarios</button>
+        <button id="option3">Ubicación</button>
+    </div>
+</div>
+
+<!-- Botón para desplegar el chatbot -->
+<button class="chat-toggle" id="chatToggleBtn">Chat</button>
+<script src="chatbot.js"></script>
+   
+    <!-- Pie de página -->
+    <footer>
+       
+        <p>&copy; 2024 Representaciones Scaleh. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
