@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Productos</title>
+    <link rel="stylesheet" href="/styles/stylesProductos.css">
+    <!-- Asegúrate de incluir jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Gestión de Productos</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Imagen</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% productos.forEach(producto => { %>
+                <tr>
+                    <td><%= producto.idProducto %></td>
+                    <td><%= producto.nombre %></td>
+                    <td><%= producto.descripcion %></td>
+                    <td>$<%= producto.precio %></td>
+                    <td><img src="<%= producto.imagenUrl %>" alt="<%= producto.nombre %>" width="50"></td>
+                    <td>
+                        <a href="/admin/editar/<%= producto.idProducto %>">Editar</a> |
+                        <a href="/admin/eliminar/<%= producto.idProducto %>">Eliminar</a>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <h2>Añadir Producto</h2>
+    <!-- Formulario de creación con AJAX -->
+    <form id="crearProductoForm">
+        <input type="text" name="nombre" placeholder="Nombre del producto" required>
+        <input type="text" name="descripcion" placeholder="Descripción" required>
+        <input type="number" name="precio" placeholder="Precio" step="0.01" required>
+        <input type="text" name="imagenUrl" placeholder="URL de la imagen" required>
+        <input type="text" name="idCategoria" placeholder="ID de la categoría">
+        <input type="text" name="marca" placeholder="Marca" required>
+        <button type="submit">Añadir Producto</button>
+    </form>
+    
+
+    <!-- Div para mostrar mensajes de éxito o error -->
+    <div id="mensaje"></div>
+
+    <script>
+        $(document).ready(function() {
+            // Capturar el envío del formulario con AJAX
+            $('#crearProductoForm').submit(function(e) {
+                e.preventDefault(); // Evitar el envío tradicional del formulario
+        
+                // Recoger los datos del formulario
+                var formData = $(this).serialize();
+        
+                // Hacer la solicitud AJAX
+                $.ajax({
+                    url: '/admin/crear',  // Ruta del servidor donde procesarás los datos
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        // Mostrar un mensaje de éxito y limpiar el formulario
+                        $('#mensaje').html('<p>' + response.message + '</p>').css('color', 'green');
+                        $('#crearProductoForm')[0].reset(); // Limpiar el formulario
+                    },
+                    error: function(xhr, status, error) {
+                        // Mostrar un mensaje de error
+                        var errMsg = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : "Hubo un error al crear el producto. Inténtalo de nuevo.";
+                        $('#mensaje').html('<p>' + errMsg + '</p>').css('color', 'red');
+                    }
+                });
+            });
+        });
+        
+    </script>
+</body>
+</html>

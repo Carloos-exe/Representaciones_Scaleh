@@ -1,38 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
     
+    <!-- Enlaza tu archivo de estilos de login -->
     <link rel="stylesheet" href="/styles/stylesRegistro.css"> 
     
-    <title>Login</title>
+    <!-- Enlaza tu archivo de JavaScript, si es necesario -->
+    <script src="/public/js/login.js" defer></script>
 </head>
 <body>
     <div class="login-container">
         <div class="login-info-container">
-            <h1 class="title">Inicia Sesión Con</h1>
+            <h1 class="title">Iniciar Sesión</h1>
             <div class="social-login">
                 <div class="social-login-element">
-                    <img src="/img/google.svg" alt="google-image">
-                    <span>Google</span>
+                    <!-- Aquí podrías agregar íconos de inicio de sesión social (por ejemplo, Google, Facebook) si lo deseas -->
+                    <!-- <img src="/img/google.svg" alt="google-image"> -->
+                    <!-- <span>Google</span> -->
                 </div>
                 <div class="social-login-element">
-                    <img src="/img/facebook.svg" alt="facebook-image">
-                    <span>Facebook</span>
+                    <img src="/img/login.png" alt="facebook-image">
+                    <!-- <span>Facebook</span> -->
                 </div>
             </div>
-            <p>or</p>
-            <form class="inputs-container" action="/login" method="POST">
-                <input class="input" type="text" name="usuario" placeholder="Usuario" required>
-                <input class="input" type="password" name="contraseña" placeholder="Contraseña" required>
-                <p>Forgot password? <span class="span">Click here</span></p>
-                <button type="submit" class="btn">Login</button>
-                <p>¿Aún no tienes una cuenta? <span class="span"> <a href="/registrate">Click Aquí</a> </span> </p>
+           
+            <!-- Formulario de inicio de sesión -->
+           <!--<form class="inputs-container" action="/login" method="POST">
+                <input class="input" id="correo" type="email" name="correo" placeholder="Correo electrónico" required>
+                <input class="input" id="contraseña" type="password" name="contrasena" placeholder="Contraseña" required>
+                <button type="submit" class="btn">Iniciar Sesión</button>
             </form>
+            --> 
+
+            <form action="/login" method="POST" class="inputs-container">
+
+                <label for="correo" class="input">Correo Electrónico:</label>
+                <input class="input" type="email" id="correo" name="correo" required>
+            
+                <label for="contraseña" class="input">Contraseña:</label>
+                <input class="input" type="password" id="contraseña" name="contraseña" required>
+            
+                <button class="btn" type="submit">Iniciar Sesión</button>
+
+
+            </form>
+            
+            <!-- Botón de regreso a la página de inicio -->
+            <button class="btn"><a href="/">Regresar</a></button>
+
+            <!-- Enlace a la página de registro -->
+            <p>¿Aún no tienes una cuenta? <span class="span"><a href="/registrate">Click Aquí</a></span></p>
         </div>
-        <img class="image-container" src="/img/login.svg" alt="">
+        <!-- Imagen decorativa (opcional) -->
+        <img class="image-container" src="/img/login.svg" alt="Login image">
     </div>
 </body>
 </html>
+

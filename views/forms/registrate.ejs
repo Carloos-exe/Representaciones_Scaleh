@@ -1,51 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <link rel="stylesheet" href="/styles/stylesRegistro.css"> 
-    
-    <title>Login</title>
+    <link rel="stylesheet" href="/styles/stylesRegistro.css">
+    <title>Registro</title>
 </head>
 <body>
     <div class="login-container">
         <div class="login-info-container">
             <h1 class="title">Crear Cuenta</h1>
-            <form class="inputs-container" action="/registrate" method="POST">
-                <p>Ingresa tu nombre</p>
-                <input class="input" type="text" name="nombre" maxlength="45" placeholder="Nombre" required>
-            
-                <p>Ingresa tu apellido</p>
-                <input class="input" type="text" name="apellido" maxlength="45" placeholder="Apellido" required>
-            
-                <p>Ingresa tu número de Teléfono</p>
-                <input class="input" type="tel" name="telefono" placeholder="Teléfono" pattern="[0-9]{10}" minlength="10" maxlength="10" required>
-            
-                <p>Ingresa tu correo electrónico</p>
-                <input class="input" type="email" name="correo" placeholder="Correo electrónico" required>
-            
-                <p>Ingresa tu nombre de usuario</p>
-                <input class="input" type="text" name="nombreUsuario" placeholder="Nombre de usuario" required>
-            
-                <p>Ingresa tu contraseña</p>
+            <form class="inputs-container" action="/registrate" method="POST" id="registroForm">
+                <p>Nombre Completo</p>
+                <input class="input" type="text" name="nombreCompleto" maxlength="100" placeholder="Nombre Completo" required>
+
+                <p>Correo Electrónico</p>
+                <input class="input" type="email" name="correo" placeholder="Correo Electrónico" required>
+
+                <p>Teléfono (opcional)</p>
+                <input class="input" type="tel" name="telefono" placeholder="Número teléfono" pattern="[0-9]{10}" maxlength="10">
+
+                <p>Nombre de Usuario</p>
+                <input class="input" type="text" name="nombreUsuario" maxlength="30" placeholder="Nombre de usuario" required>
+
+                <p>Contraseña</p>
                 <input class="input" type="password" name="contraseña" minlength="8" placeholder="********" required>
 
-                <p>Confirma tu contraseña</p>
+                <p>Confirmar Contraseña</p>
                 <input class="input" type="password" name="confirmarContraseña" minlength="8" placeholder="********" required>
 
-            
-                <!-- <p>Forgot password? <span class="span">Click here</span></p> -->
                 <button type="submit" class="btn">Crear Cuenta</button>
-            
-                <!-- <p>Don't have an account? <span class="span"><a href="/formulario">Click Aquí</a></span></p> -->
+                <a href="/" class="btn">Regresar</a>
             </form>
+
+            <!-- Div para mostrar mensajes de error -->
+            <div id="mensaje"></div>
         </div>
-        <img class="image-container" src="/img/login.svg" alt="">
+        <img class="image-container" src="/img/login.svg" alt="Registro">
     </div>
+
+    <!-- Script para validar las contraseñas -->
+    <script>
+        document.querySelector("#registroForm").addEventListener("submit", function(event) {
+            const password = document.querySelector('input[name="contraseña"]').value;
+            const confirmPassword = document.querySelector('input[name="confirmarContraseña"]').value;
+
+            if (password !== confirmPassword) {
+                alert("Las contraseñas no coinciden.");
+                event.preventDefault();
+            }
+        });
+    </script>
 </body>
 </html>
-
-
-api iniciar sesión con google.

@@ -10,7 +10,7 @@
 nav{
     display: flex;
     width: 100%;
-    background: red;
+    background: #FF7F32;
     position: relative;
     justify-content: space-between;
     text-align: center;
@@ -246,8 +246,8 @@ display: none;
         width: 100%;
         margin-top: 0;
         background: orange;
-        border-radius: 0; /* Sin bordes redondeados en móviles */
-        box-shadow: none; /* Sin sombra en móviles */
+        border-radius: 0; 
+        box-shadow: none; 
     }
 
     nav ol li ul li a {
@@ -260,6 +260,8 @@ display: none;
         color: #0a5071;
     }
 }
+
+/* Aquí termina la media */
 
 
 
@@ -344,3 +346,38 @@ main button:hover {
     flex-direction: row;
 }
 
+.product-catalog {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.product-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.product-card {
+    width: 22%; /* Ajuste para que entren 4 tarjetas por fila */
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    background-color: #f9f9f9;
+}
+
+.product-card h2 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.product-card p {
+    font-size: 1em;
+    margin: 5px 0;
+}
+
+img{
+    align-items: center;
+    justify-content: center;
+}

@@ -1,103 +1,324 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Representaciones</title>
-    <link rel="stylesheet" type="text/css" href="/styles/style.css">
-    <link rel="stylesheet" type="text/css" href="/styles/stylesContent.css">
-    
-    <script src="https://kit.fontawesome.com/67c66657c7.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Distribuidora Scale</title>
+    <style>
+        /* Reset */
+        /* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+/* General Styles */
+body {
+    font-family: 'Poppins', Arial, sans-serif;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #FF7F32; /* Naranja */
+    padding: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+}
+
+.navbar .logo {
+    font-size: 1.5em;
+    color: #fff;
+}
+
+/* Hero Section */
+.hero {
+    position: relative;
+    background-image: url('https://i.ibb.co/0jmYW1j/Imagen-de-Whats-App-2024-11-15-a-las-18-29-16-4f75c611.jpg'); /* Imagen de fondo */
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    z-index: 1;
+}
+
+/* Capa de opacidad */
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+}
+
+.hero-content {
+    max-width: 600px;
+}
+
+.hero h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+}
+
+.hero button {
+    padding: 10px 20px;
+    font-size: 1em;
+    color: #FF7F32;
+    background-color: #fff;
+    border: 2px solid #FF7F32;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.hero button:hover {
+    background-color: #FF7F32;
+    color: #fff;
+}
+
+/* Products Section */
+.products {
+    padding: 50px 20px;
+    text-align: center;
+    background-color: #f9f9f9;
+}
+
+.products h2 {
+    color: #FF7F32;
+    margin-bottom: 20px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.product-card {
+    width: 22%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    background-color: #fff;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.product-card h2 {
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+.product-card p {
+    font-size: 1em;
+    margin: 5px 0;
+    color: #555;
+}
+
+.product-card button {
+    background-color: #FF7F32;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.product-card button:hover {
+    background-color: darkred;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Benefits Section */
+.benefits {
+    padding: 50px 20px;
+    text-align: center;
+    background-color: #fff;
+}
+
+.benefits h2 {
+    color: #FF7F32;
+    margin-bottom: 20px;
+}
+
+.benefit-item {
+    margin: 20px 0;
+}
+
+/* Contact Section */
+.contact {
+    padding: 50px 20px;
+    text-align: center;
+    background-color: #f9f9f9;
+}
+
+.contact h2 {
+    color: #FF7F32;
+    margin-bottom: 20px;
+}
+
+.contact-form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.contact-form button {
+    padding: 10px 20px;
+    background-color: #FF7F32;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.contact-form button:hover {
+    background-color: darkorange;
+}
+
+/* Footer CTA */
+.footer-cta {
+    background-color: #FF7F32;
+    color: #fff;
+    padding: 30px;
+    text-align: center;
+}
+
+.footer-cta p {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.footer-cta button {
+    padding: 10px 20px;
+    background-color: #fff;
+    color: #FF7F32;
+    border: 2px solid #fff;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.footer-cta button:hover {
+    background-color: darkorange;
+    color: #fff;
+}
+
+    </style>
 </head>
 <body>
-    <input type="checkbox" id="check">
-    
-    <nav>
-        
-        <div class="icon">Representaciones  <b style="color: black;">Scaleh</b></div>
-        <div class="search_box">.
-            <input type="search" placeholder="Buscar Productos">
-            <span class="fa fa-search"></span>
-            
-        </div>
-        <ol>
-            <li><a href="/">Inicio</a></li>
-            <li><a href="/descuentos">Descuentos</a></li>
-            <li><a href="/productos">Productos</a>
-                <ul>
-                    <li><a href="#">Construcción</a></li>
-                    <li><a href="#">Fontanería</a></li>
-                    <li><a href="#">Electricidad</a></li>
-                    <li><a href="#">Cisternas</a></li>
-                    <li><a href="#">Tubería</a></li>
-                </ul>
-            </li>
-            <li><a href="/login">Inicia Sesión</a></li>
-        </ol>         
-        <label for="check" class="bar">
-            <span class="fa fa-bars" id="bars"></span>
-            <span class="fa fa-times" id="times"> </span>
-        </label>
-    </nav>
-    <section>
-    </section>
 
-    <main id="contenido">
-        <h2>Bienvenidos a Representaciones Scaleh</h2>
-        <p>Encuentra tinacos, tubos y todo lo necesario para tu proyecto de fontanería con la mejor calidad y atención personalizada.</p>
-        
-        <!-- Sección de productos destacados -->
-        <div class="products">
-            <div class="product-card">
-                <img src="https://i.ibb.co/pd3tdNB/tinaco-1100.jpg" alt="Tinaco WA  1,100L">
-                <h3>Tinaco WASSERPLAST 1,100L</h3>
-                <p>$1,687.00 MXN</p>
-            </div>
-            <div class="product-card">
-                <img src="https://i.ibb.co/fQCzN65/pvc-22.jpg" alt="Tubo PVC">
-                <h3>Tubo de PVC 2”</h3>
-                <p>$120 MXN / metro</p>
-            </div>
-            <div class="product-card">
-                <img src="https://i.ibb.co/rv5mJtQ/valvula.jpg" alt="Válvula">
-                <h3>Válvula Esférica</h3>
-                <p>$300 MXN</p>
-            </div>
-        </div>
-    </main>
-
-   <!-- Contenedor del chatbot -->
-<link rel="stylesheet" href="chatbot.css">
-<div class="chat-container" id="chatContainer">
-    <div class="chat-header">
-        <h2>Asistente Virtual</h2>
-    </div>
-    <div class="chat-body" id="chat-body">
-        <div class="bot-message">
-            <p>Hola, ¿cómo te puedo ayudar hoy?</p>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">Distribuciones Scaleh</div>
+        <div>
+            <a href="/">Inicio</a>
+            <!-- <a href="/descuentos">Promociones</a> -->
+            <a href="/productos">Productos</a>
+            <a href="/login">Inicia Sesión</a>
         </div>
     </div>
-    <div class="chat-footer">
-        <button id="option1">Precios</button>
-        <button id="option2">Horarios</button>
-        <button id="option3">Ubicación</button>
-    </div>
-</div>
 
-<!-- Botón para desplegar el chatbot -->
-<button class="chat-toggle" id="chatToggleBtn">Chat</button>
-<script src="chatbot.js"></script>
-   
-    <!-- Pie de página -->
-    <footer>
-       
-        <p>&copy; 2024 Representaciones Scaleh. Todos los derechos reservados.</p>
-    </footer>
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Materiales de Plomería y Ferretería de Calidad </h1>
+            <p>Proveemos todo lo que necesitas para ferretería</p>
+            <button><a href="/productos">Explora nuestros productos</a></button>
+        </div>
+    </div>
+
+    <!-- Product Section -->
+    <div class="products">
+        <h2>Productos Destacados</h2>
+        <div class="product-item">
+            <h3>Tinacos</h3>
+            <p>Amplia gama de tinacos de diversas capacidades, materiales, y marcas ideales para almacenamiento seguro de agua.</p>
+        </div>
+        <div class="product-item">
+            <h3>Tuberías y Conexiones</h3>
+            <p>Material resistente y confiable para tus instalaciones de agua, gas y drenaje.</p>
+        </div>
+        <div class="product-item">
+            <h3>Tejas y Techos</h3>
+            <p>Variedad de tejas y materiales para techos, perfectos para acabados duraderos y estéticos.</p>
+        </div>
+    </div>
+
+    <!-- Benefits Section -->
+    <div class="benefits">
+        <h2>¿Por Qué Elegirnos?</h2>
+        <div class="benefit-item">
+            <p><strong>Calidad y Durabilidad:</strong> Nuestros productos están hechos para durar y resistir.</p>
+        </div>
+        <div class="benefit-item">
+            <p><strong>Distribución Rápida y Confiable:</strong> Entrega puntual para que tus proyectos no se detengan.</p>
+        </div>
+        <div class="benefit-item">
+            <p><strong>Asesoría Técnica:</strong> Nuestro equipo está listo para ayudarte a elegir los productos adecuados.</p>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="contact">
+        <h2>Contacto</h2>
+        <div class="contact-form">
+            <input type="text" placeholder="Nombre" required>
+            <input type="email" placeholder="Correo electrónico" required>
+            <input type="tel" placeholder="Teléfono">
+            <textarea placeholder="Mensaje o consulta" required></textarea>
+            <button>Enviar Mensaje</button>
+        </div>
+    </div>
+
+    <!-- Footer CTA -->
+    <div class="footer-cta">
+        <h2>¿Listo para empezar?</h2>
+        <p>Contáctanos y obtén los mejores materiales</p>
+    </div>
+
 </body>
 </html>

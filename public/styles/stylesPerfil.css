@@ -1,0 +1,170 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+header {
+    background-color: #2c3e50;
+    color: #fff;
+    padding: 1em 2em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+header nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 0.5em;
+    font-size: 1em;
+    transition: color 0.3s ease;
+}
+
+header nav a:hover {
+    color: #18bc9c;
+}
+
+/* Sección principal */
+main {
+    max-width: 1200px;
+    margin: 2em auto;
+    padding: 0 2em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2em;
+}
+
+/* Perfil */
+.perfil {
+    flex: 2;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 2em;
+}
+
+.perfil h2 {
+    font-size: 1.8em;
+    margin-bottom: 1em;
+    color: #2c3e50;
+}
+
+.perfil label {
+    display: block;
+    font-weight: bold;
+    margin: 1em 0 0.5em;
+}
+
+.perfil input[type="text"],
+.perfil input[type="tel"],
+.perfil input[type="email"] {
+    width: 100%;
+    padding: 0.8em;
+    margin-bottom: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.perfil button {
+    background-color: #18bc9c;
+    color: white;
+    padding: 0.8em 2em;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.perfil button:hover {
+    background-color: #16a085;
+}
+
+/* Acciones */
+.acciones {
+    flex: 1;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 2em;
+    text-align: center;
+}
+
+.acciones h2 {
+    font-size: 1.8em;
+    margin-bottom: 1em;
+    color: #2c3e50;
+}
+
+.acciones a {
+    display: block;
+    margin: 1em 0;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    padding: 0.8em;
+    border-radius: 5px;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.acciones a:hover {
+    background-color: #2980b9;
+}
+
+/* Footer */
+footer {
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 1em 0;
+    margin-top: 2em;
+    font-size: 0.9em;
+}
+
+/* Adaptaciones Responsivas */
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+        gap: 1em;
+    }
+
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    header nav a {
+        margin: 0.5em 0;
+    }
+}
+.alert {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.alert.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+}
+
+.alert.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+}

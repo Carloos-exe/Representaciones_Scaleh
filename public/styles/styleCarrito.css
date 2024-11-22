@@ -1,0 +1,179 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Estilo general del encabezado */
+header {
+    background-color: #457b9d;
+    color: white;
+    padding: 15px 0;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2em;
+    margin: 0;
+}
+
+/* Estilo de la barra de navegación */
+nav {
+    display: flex;
+    justify-content: space-between;
+    background: red;
+    padding: 15px 30px;
+}
+
+nav ol {
+    display: flex;
+    list-style: none;
+    margin: auto 0;
+}
+
+nav ol li {
+    margin: 0 2px;
+}
+
+nav ol li a {
+    color: aliceblue;
+    font-size: 20px;
+    text-decoration: none;
+    text-transform: capitalize;
+    letter-spacing: 1px;
+    padding: 5px 10px;
+}
+
+nav ol li:hover a {
+    background: #fff;
+    color: #0a5071;
+}
+
+nav .search_box {
+    display: flex;
+    margin: auto;
+    height: 35px;
+    line-height: 35px;
+}
+
+nav .search_box input {
+    border: none;
+    outline: none;
+    background: #fff;
+    height: 100%;
+    padding: 0 10px;
+    font-size: 20px;
+    width: 350px;
+}
+
+nav .search_box span {
+    color: maroon;
+    font-size: 20px;
+    background: white;
+    height: 100%;
+    padding: 8px;
+    position: relative;
+    cursor: pointer;
+    z-index: 1;
+}
+
+nav .search_box span:hover::after {
+    width: 100%;
+}
+
+footer {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+}
+
+footer p {
+    margin: 0;
+}
+
+/* Estilo del contenedor principal */
+main {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 1200px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+/* Estilo de las tablas */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
+}
+
+th, td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+td {
+    background-color: #fff;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Botones de acción */
+button {
+    background-color: #e63946;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #d62828;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between; /* Separar los botones horizontalmente */
+    align-items: center; /* Alinear verticalmente al centro */
+    margin-top: 20px; /* Espaciado entre los botones y el contenido superior */
+}
+
+.actions a, .actions button {
+    text-decoration: none;
+    color: #fff;
+    background-color: #457b9d;
+    padding: 8px 15px;
+    border-radius: 5px;
+    display: inline-block; /* Asegura que los enlaces y botones se comporten igual */
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.actions a:hover, .actions button:hover {
+    background-color: #355d75; /* Cambia el color al pasar el mouse */
+}

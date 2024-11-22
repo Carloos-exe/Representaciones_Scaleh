@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil</title>
+    <link rel="stylesheet" href="/styles/stylesPerfil.css">
+</head>
+<body>
+    <header>
+        <h1>Bienvenido, <%= usuario.nombreUsuario %>!</h1>
+        <nav>
+            <a href="/productos">Productos</a>
+            <a href="/carrito">Carrito</a>
+            <a href="/logout">Cerrar sesión</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="perfil">
+            <h2>Tu Perfil</h2>
+
+            <% if (message) { %>
+                <div class="alert <%= message.type %>">
+                    <p><%= message.text %></p>
+                </div>
+            <% } %>
+            
+            <form action="/perfil/editar" method="POST">
+                <label for="nombre">Nombre:</label>
+                <input 
+                    type="text" 
+                    id="nombre" 
+                    name="nombre" 
+                    value="<%= usuario.Nombre %>" 
+                    pattern="[A-Za-z ]{1,50}" 
+                    title="Solo se permiten letras y espacios. Máximo 50 caracteres."
+                    required
+                >
+
+                <label for="apellido">Apellido:</label>
+                <input 
+                    type="text" 
+                    id="apellido" 
+                    name="apellido" 
+                    value="<%= usuario.Apellido %>" 
+                    pattern="[A-Za-z ]{1,50}" 
+                    title="Solo se permiten letras y espacios. Máximo 50 caracteres."
+                    required
+                >
+
+                <label for="telefono">Teléfono:</label>
+                <input 
+                    type="tel" 
+                    id="telefono" 
+                    name="telefono" 
+                    value="<%= usuario.Telefono %>" 
+                    pattern="[0-9]{10}" 
+                    title="Debe contener 10 dígitos numéricos." 
+                    required
+                >
+
+                <label for="correo">Correo Electrónico:</label>
+                <input 
+                    type="email" 
+                    id="correo" 
+                    name="correo" 
+                    value="<%= usuario.Correo %>" 
+                    title="Debe ser un correo electrónico válido." 
+                    required
+                >
+
+                <button type="submit">Guardar Cambios</button>
+                <button type="reset">Reiniciar</button>
+            </form>
+        </section>
+        <section class="acciones">
+            <h2>Opciones</h2>
+            <a href="/productos">Explorar Productos</a>
+            <a href="/carrito">Ver Carrito</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Ferretería - Todos los derechos reservados</p>
+    </footer>
+</body>
+</html>

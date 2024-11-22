@@ -1,58 +1,53 @@
-const db = require('../config/dbConnection');
+const express = require('express');
 const bcrypt = require('bcrypt');
+const db = require('../config/dbConnection'); // Conexión a la base de datos
+const router = express.Router();
 
-const registrarUsuario = async (req, res) => {
-    const { nombre, apellido, telefono, correo, nombreUsuario, contraseña, confirmarContraseña } = req.body;
+router.post('/registrate', (req, res) => {
+    const { nombre, apellido, telefono, correo, nombreUsuario, contraseña } = req.body;
 
-    // Verificar si las contraseñas coinciden
-    if (contraseña !== confirmarContraseña) {
-        return res.status(400).json({ mensaje: 'Las contraseñas no coinciden' });
-    }
+    // Verificar si ya existe un correo registrado
+    db.query('SELECT * FROM personas WHERE correo = ?', [correo], (err, results) => {
+        if (err) {
+            console.error('Error al verificar correo:', err);
+            return res.status(500).send('Error al verificar correo');
+        }
 
-    try {
-        // Verificar si el nombre de usuario ya existe
-        const sqlCheckUsuario = 'SELECT * FROM usuarios WHERE nombreUsuario = ?';
-        db.query(sqlCheckUsuario, [nombreUsuario], async (err, results) => {
+        if (results.length > 0) {
+            return res.status(400).send('Correo ya registrado');
+        }
+
+        // Cifrar la contraseña antes de almacenarla
+        bcrypt.hash(contraseña, 10, (err, hashedPassword) => {
             if (err) {
-                console.error('Error al verificar el nombre de usuario:', err);
-                return res.status(500).json({ mensaje: 'Error en el servidor' });
+                console.error('Error al cifrar la contraseña:', err);
+                return res.status(500).send('Error al cifrar la contraseña');
             }
 
-            if (results.length > 0) {
-                return res.status(400).json({ mensaje: 'El nombre de usuario ya está en uso' });
-            }
-
-            // Si no hay duplicados, continúa con la inserción
-            const hashedPassword = await bcrypt.hash(contraseña, 10);
-
-            // Inserta en la tabla personas
-            const sqlInsertPersona = 'INSERT INTO personas (Nombre, Apellido, Telefono, Correo) VALUES (?, ?, ?, ?)';
-            db.query(sqlInsertPersona, [nombre, apellido, telefono, correo], (err, result) => {
-                if (err) {
-                    console.error('Error al agregar la persona:', err);
-                    return res.status(500).send('Error al agregar la persona');
-                }
-
-                const idPersona = result.insertId;
-
-                // Inserta en la tabla usuarios con la contraseña hasheada
-                const sqlInsertUsuario = 'INSERT INTO usuarios (idPersona, contraseña, nombreUsuario) VALUES (?, ?, ?)';
-                db.query(sqlInsertUsuario, [idPersona, hashedPassword, nombreUsuario], (err) => {
+            // Insertar la persona en la base de datos
+            db.query('INSERT INTO personas (nombre, apellido, telefono, correo) VALUES (?, ?, ?, ?)', 
+                [nombre, apellido, telefono, correo], (err, result) => {
                     if (err) {
-                        console.error('Error al agregar el usuario:', err);
-                        return res.status(500).send('Error al agregar el usuario');
+                        console.error('Error al insertar persona:', err);
+                        return res.status(500).send('Error al registrar persona');
                     }
 
-                    // Redirige o responde con éxito
-                    res.status(201).json({ mensaje: 'Usuario registrado correctamente' });
-                });
-            });
-        });
-    } catch (error) {
-        console.error('Error al registrar el usuario:', error);
-        return res.status(500).json({ mensaje: 'Error al registrar el usuario' });
-    }
-};
+                    // Obtener el idPersona de la persona recién insertada
+                    const idPersona = result.insertId;
 
-module.exports = { registrarUsuario };
-// module.EXPORTTS= registrarUsuario;
+                    // Insertar el usuario en la tabla usuarios con idPersona y la contraseña cifrada
+                    db.query('INSERT INTO usuarios (idPersona, contraseña, nombreUsuario, userRol) VALUES (?, ?, ?, ?)', 
+                        [idPersona, hashedPassword, nombreUsuario, 'usuario'], (err) => {
+                            if (err) {
+                                console.error('Error al insertar usuario:', err);
+                                return res.status(500).send('Error al registrar usuario');
+                            }
+
+                            res.redirect('/login'); // Redirigir al login después del registro exitoso
+                        });
+                });
+        });
+    });
+});
+
+module.exports = router;

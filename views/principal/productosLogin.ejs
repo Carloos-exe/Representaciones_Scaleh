@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Representaciones</title>
+    <link rel="stylesheet" type="text/css" href="/styles/style.css">
+    <script src="https://kit.fontawesome.com/67c66657c7.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Menú de navegación -->
+    <nav>
+        <div class="icon">Distribuciones <b style="color: black;">Scaleh</b></div>
+        <div class="search-bar">
+            <form action="/productos/buscar" method="get">
+                <input type="text" name="search" placeholder="Buscar productos" required>
+                <button type="submit"><i class="fas fa-search"></i> Buscar</button>
+            </form>
+        </div>
+        <ol>
+            <li><a href="/">Inicio</a></li>
+            <!-- <li><a href="/descuentos">Descuentos</a></li> -->
+            <li><a href="/productos">Productos</a>
+                <!-- <ul> 
+                    <li><a href="#">Construcción</a></li>
+                    <li><a href="#">Fontanería</a></li>
+                    <li><a href="#">Electricidad</a></li>
+                    <li><a href="#">Cisternas</a></li>
+                    <li><a href="#">Tubería</a></li>
+                </ul>-->
+            </li>
+            <li><a href="/perfil">Perfil</a></li>
+        </ol>
+        <label for="check" class="bar">
+            <span class="fa fa-bars" id="bars"></span>
+            <span class="fa fa-times" id="times"></span>
+        </label>
+    </nav>
+
+    <!-- Contenido principal -->
+    <main>
+        <h1>Catálogo de Productos</h1>
+        <div class="product-catalog">
+            <% if (productos && productos.length > 0) { %>
+                <% productos.forEach((producto, index) => { %>
+                    <!-- Crear una nueva fila cada 4 productos -->
+                    <% if (index % 4 === 0) { %>
+                        <div class="product-row">
+                    <% } %>
+                    
+                    <div class="product-card">
+                        <% if (producto.imagenUrl) { %>
+                            <img src="<%= producto.imagenUrl %>" alt="<%= producto.nombreProducto %>">
+                        <% } else { %>
+                            <img src="/img/default-product.jpg" alt="imagen no disponible">
+                        <% } %>
+                        <h2><%= producto.nombreProducto %></h2>
+                        <p><strong>Descripción:</strong> <%= producto.descripcionProducto %></p>
+                        <p><strong>Precio:</strong> $<%= isNaN(Number(producto.precio)) ? 'N/A' : Number(producto.precio).toFixed(2) %></p>
+                        
+                        <!-- Formulario para agregar al carrito -->
+                        <form action="/carrito/agregar" method="POST" class="add-to-cart-form">
+                            <input type="hidden" name="productoId" value="<%= producto.idProducto %>">
+                            <label for="cantidad-<%= producto.idProducto %>">Cantidad:</label>
+                            <input type="number" name="cantidad" id="cantidad-<%= producto.idProducto %>" value="1" min="1" required>
+                            <button type="submit">Agregar al Carrito</button>
+                        </form>
+                    </div>
+                    
+
+                    <% if ((index + 1) % 4 === 0 || index === productos.length - 1) { %>
+                        </div>
+                    <% } %>
+                <% }); %>
+            <% } else { %>
+                <p>No se encontraron productos disponibles.</p>
+            <% } %>
+        </div>
+    </main>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>&copy; 2024 Representaciones Scaleh. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
