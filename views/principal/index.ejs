@@ -247,19 +247,180 @@ body {
     color: #fff;
 }
 
+nav{
+    display: flex;
+    width: 100%;
+    background: #FF7F32;
+    position: relative;
+    justify-content: space-between;
+    text-align: center;
+    padding: 15px 30px;
+}
+
+nav .icon{
+    font-size: 30px;
+    font-weight: 800;
+    color: aliceblue;
+    cursor: pointer;
+}
+
+nav ol{
+    display: flex;
+    list-style: none;
+    margin: auto 0;
+}
+
+nav ol li{
+    margin: 0 2px
+}
+
+nav ol li a{
+    color: aliceblue;
+    font-size: 20px;
+    text-decoration: none;
+    text-transform: capitalize;
+    letter-spacing: 1px;
+    padding: 5px 10px;
+
+}
+
+
+nav ol li:hover a{
+    background: #fff;
+    color: #0a5071;
+
+}
+
+/* Para el sub menu de productos*/
+nav ol li ul {
+    display: none;
+    position: absolute;
+    background-color: rgba(255, 0, 0, 0.9); /* Fondo rojo semi-transparente */
+    padding: 10px;
+    margin-top: 10px;
+    list-style: none;
+    border-radius: 8px; /* Esquinas redondeadas */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para dar profundidad */
+    transition: all 0.3s ease-in-out; /* Transición suave */
+}
+
+nav ol li:hover ul {
+    display: block;
+}
+
+nav ol li ul li {
+    margin: 10px 0; /* Más espaciado entre las categorías */
+}
+
+nav ol li ul li a {
+    padding: 8px 20px;
+    font-size: 18px;
+    display: block;
+    border-radius: 4px; /* Esquinas redondeadas */
+    transition: background-color 0.3s ease-in-out; /* Transición suave al hover */
+}
+
+nav ol li ul li a:hover {
+    background-color: #fff;
+    color: #0a5071;
+}
+
+/* Aquí termina el sub menu de productos*/
+
+nav .search_box{
+    display: flex;
+    margin:auto 0;
+    height: 35px;
+     line-height: 35px; 
+}
+
+nav .search_box{
+    display: flex;
+    margin:auto;
+    height: 35px;
+    line-height: 35px;
+}
+
+
+nav .search_box input{
+    border: none;
+    outline: none;
+    background: #fff;
+    height: 100%;
+    padding: 0 10 px;
+    font-size: 20px;
+    width: 350px;
+}
+
+nav .search_box span{
+    color: maroon;
+    font-size: 20px;
+    background: white;
+    height: 100%;
+    padding: 8px;
+    position: relative;
+    cursor: pointer;
+    z-index: 1;
+}
+
+
+nav .search_box span::after{
+    height: 100%;
+    width: 0%;
+    content: " ";
+    background:orange;
+    position:absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    transition: 0.3s;
+}
+
+nav .search_box span:hover:after{
+width: 100%;
+}
+
+nav .bar {
+    position:relative;
+    margin: auto;
+    display: none;
+}
+
+nav.bar span{
+    position: absolute;
+    color: #fff;
+    font-size: 35px;
+}
+
+
     </style>
 </head>
 <body>
+       
+        <nav>
+            <div class="icon">Distribuciones <b style="color: black;">Scaleh</b></div>
+            <div class="search-bar">
+            </div>
+            <ol>
+                <li><a href="/">Inicio</a></li>
+                <!-- <li><a href="/descuentos">Descuentos</a></li> -->
+                <li><a href="/productos">Productos</a>
+                    <!-- <ul> 
+                        <li><a href="#">Construcción</a></li>
+                        <li><a href="#">Fontanería</a></li>
+                        <li><a href="#">Electricidad</a></li>
+                        <li><a href="#">Cisternas</a></li>
+                        <li><a href="#">Tubería</a></li>
+                    </ul>-->
+                </li>
+                <li><a href="/login">Inicia Sesión</a></li>
+            </ol>
+            <label for="check" class="bar">
+                <span class="fa fa-bars" id="bars"></span>
+                <span class="fa fa-times" id="times"></span>
+            </label>
+        </nav>
 
-    <!-- Navbar -->
-    <div class="navbar">
-        <div class="logo">Distribuciones Scaleh</div>
-        <div>
-            <a href="/">Inicio</a>
-            <!-- <a href="/descuentos">Promociones</a> -->
-            <a href="/productos">Productos</a>
-            <a href="/login">Inicia Sesión</a>
-        </div>
     </div>
 
     <!-- Hero Section -->
@@ -318,6 +479,9 @@ body {
     <div class="footer-cta">
         <h2>¿Listo para empezar?</h2>
         <p>Contáctanos y obtén los mejores materiales</p>
+        <p><a href="https://www.facebook.com/profile.php?id=61566490556690&sk=about" target="_blank">Visítanos en Facebook</a></p>
+        
+        <p><a href="https://www.instagram.com/scalehdistribucionesferreteras/" target="_blank">Síguenos en Instagram</a></p>
     </div>
 
 </body>

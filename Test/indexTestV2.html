@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+    <link rel="stylesheet" href="estilos.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contáctanos - Representaciones Scaleh</title>
+  
+</head>
+<body>
+
+    <!-- Encabezado -->
+    <header>
+        <h1>Contáctanos</h1>
+        <p>Estamos aquí para ayudarte</p>
+    </header>
+
+    <!-- Menú de navegación -->
+    <nav>
+        <ul>
+            <li><a href="inicio.html">Inicio</a></li>
+            <li><a href="productos.html">Productos</a></li>
+            <li><a href="sobre_nosotros.html">Sobre Nosotros</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contenido principal -->
+    <main>
+        <h2>Nuestras Redes Sociales</h2>
+        <p><a href="https://www.facebook.com/profile.php?id=61566490556690&sk=about" target="_blank">Visítanos en Facebook</a></p>
+        
+        <p><a href="https://www.instagram.com/scalehdistribucionesferreteras/" target="_blank">Síguenos en Instagram</a></p>
+
+        <h2>¿Tienes preguntas?</h2>
+        <p>Déjanos tu mensaje y te responderemos a la brevedad.</p>
+
+        <form>
+            <input type="text" placeholder="Tu Nombre" required>
+            <input type="email" placeholder="Tu Correo Electrónico" required>
+            <textarea placeholder="Tu Mensaje" rows="4" required></textarea>
+            <button type="submit">Enviar</button>
+        </form>
+    </main>
+
+     <!-- Contenedor del chatbot -->
+<link rel="stylesheet" href="chatbot.css">
+<div class="chat-container" id="chatContainer">
+    <div class="chat-header">
+        <h2>Asistente Virtual</h2>
+    </div>
+    <div class="chat-body" id="chat-body">
+        <div class="bot-message">
+            <p>Hola, ¿cómo te puedo ayudar hoy?</p>
+        </div>
+    </div>
+    <div class="chat-footer">
+        <button id="option1">Precios</button>
+        <button id="option2">Horarios</button>
+        <button id="option3">Ubicación</button>
+    </div>
+</div>
+
+<!-- Botón para desplegar el chatbot -->
+<button class="chat-toggle" id="chatToggleBtn">Chat</button>
+
+<script src="chatbot.js"></script>
+
+
+    <!-- Pie de página -->
+    <footer>
+        <p>&copy; 2024 Representaciones Scaleh. Todos los derechos reservados.</p>
+    </footer>
+
+</body>
+</html>
