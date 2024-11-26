@@ -1,4 +1,4 @@
 deployment:
-  type: git
-  branch: main # o la rama que estés utilizando
-  repo: https://github.com/Carloos-exe/Representaciones_Scaleh.git # Cambia esta URL por la de tu repositorio en GitHub
+  tasks:
+    - export DEPLOYPATH=/home/scalehco/public_html  # Ruta personalizada
+    - /bin/cp -R * $DEPLOYPATH  # Copia todos los archivos del repositorio a esa carpeta
