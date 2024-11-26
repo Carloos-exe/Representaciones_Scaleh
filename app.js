@@ -4,35 +4,53 @@ const session = require('express-session');
 const bcrypt = require('bcrypt');
 const db = require('./config/dbConnection');
 const flash = require('connect-flash');
-const app = express();
-
-// Rutas
+const helmet = require('helmet');
+const validator = require('validator');
+const isAuthenticated = require('./middleware/isAuthenticated');
 const productosRoutes = require('./routes/productos/productos');
 const registroRoutes = require('./routes/registrate/registrate');
 const crud = require('./routes/productos/crud');
 const perfilRoutes = require('./routes/perfil');
+const carritoRoutes = require('./routes/carrito'); // Nueva ruta para el carrito
+const buscarRoutes = require('./routes/productos/buscarProducto')
+const clientesRoutes = require('./routes/clientes/clientes');
 
-// Middleware
-const isAuthenticated = require('./middleware/isAuthenticated');
+
+
+const app = express();
 
 // Configuraciones
 app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'ejs');
-app.set('views', [path.join(__dirname, 'views/principal'), path.join(__dirname, 'views/forms')]);
+app.set('views', [
+    path.join(__dirname, 'views/principal'), 
+    path.join(__dirname, 'views/forms'), 
+    path.join(__dirname, 'views/admin')
+]);
+
 
 // Middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false
+}));
 
+process.on('unhandledRejection', (error) => {
+    console.error('Unhandled promise rejection:', error);
+  });
+
+  
 // Configuración de express-session
 app.use(session({
     secret: 'tu-clave-secreta',
     resave: false,
     saveUninitialized: true,
     cookie: {
-        secure: false, // Cambiar a true si usas HTTPS
+        secure: process.env.NODE_ENV === 'production', // Asegúrate de usar HTTPS en producción
         maxAge: 1000 * 60 * 60 * 24 // 1 día
     }
 }));
@@ -41,7 +59,12 @@ app.use(session({
 app.use('/productos', productosRoutes);
 app.use('/registrate', registroRoutes);
 app.use('/admin', crud);
-app.use('/perfil', perfilRoutes); // Rutas para el perfil
+app.use('/perfil', perfilRoutes);
+app.use('/carrito', carritoRoutes);
+app.use('/buscar', buscarRoutes);
+app.use('/admin/clientes', clientesRoutes);  
+
+
 
 // Ruta para el inicio de sesión (POST)
 app.post('/login', async (req, res) => {
@@ -53,7 +76,10 @@ app.post('/login', async (req, res) => {
         }
 
         const [usuario] = await db.execute(
-            'SELECT u.idUsuarios, u.contraseña, p.Nombre, p.Apellido FROM usuarios u JOIN personas p ON u.idPersona = p.idPersona WHERE p.Correo = ?',
+            `SELECT u.idUsuarios, u.contraseña, u.userRol, p.Nombre, p.Apellido 
+             FROM usuarios u 
+             JOIN personas p ON u.idPersona = p.idPersona 
+             WHERE p.Correo = ?`,
             [correo]
         );
 
@@ -66,17 +92,28 @@ app.post('/login', async (req, res) => {
             return res.status(400).send({ message: 'Correo electrónico o contraseña incorrectos.' });
         }
 
-        req.session.userId = usuario[0].idUsuarios;
-        req.session.userName = usuario[0].Nombre;
+        req.session.regenerate((err) => {
+            if (err) {
+                console.error('Error al regenerar sesión:', err);
+                return res.status(500).send('Error interno del servidor');
+            }
+            req.session.userId = usuario[0].idUsuarios;
+            req.session.userName = usuario[0].Nombre;
+            req.session.userRol = usuario[0].userRol; // Guardar el rol en la sesión
 
-        console.log('Usuario autenticado:', req.session);
-
-        res.redirect('/perfil');
+            // Redirigir según el rol del usuario
+            if (req.session.userRol === 'admin') {
+                return res.redirect('/admin');  // Redirige a /admin para el administrador
+            } else {
+                return res.redirect('/perfil');  // Redirige al perfil para otros usuarios
+            }
+        });
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
         res.status(500).send({ message: 'Error interno del servidor.' });
     }
 });
+
 
 // Ruta GET para el login (formulario de login)
 app.get('/login', (req, res) => {
@@ -86,20 +123,27 @@ app.get('/login', (req, res) => {
 // Página de inicio
 app.get('/', (req, res) => res.render('index'));
 
+
+
 // Rutas de administración
-app.get('/admin', async (req, res) => {
+const { ensureRole } = require('./middleware/roles');
+
+// Rutas de administración protegidas
+app.get('/admin', isAuthenticated, ensureRole(['admin', 'trabajador']), async (req, res) => {
     try {
         const [productos] = await db.execute(
             `SELECT idProducto, nombreProducto AS nombre, descripcionProducto AS descripcion, 
                     CAST(precio AS DECIMAL(10,2)) AS precio, imagenUrl 
              FROM productos`
         );
-        res.render('crud', { productos });
+        res.render('dashboard',  { productos: JSON.stringify(productos) });
     } catch (error) {
         console.error('Error al obtener productos:', error);
         res.status(500).send('Error al obtener productos');
     }
 });
+
+
 
 // Ruta para ver el perfil
 app.get('/perfil', isAuthenticated, async (req, res) => {
@@ -122,6 +166,7 @@ app.get('/perfil', isAuthenticated, async (req, res) => {
     }
 });
 
+
 // Ruta para editar el perfil (POST)
 app.post('/perfil/editar', isAuthenticated, async (req, res) => {
     const { nombre, apellido, telefono, correo } = req.body;
@@ -132,10 +177,16 @@ app.post('/perfil/editar', isAuthenticated, async (req, res) => {
             return res.redirect('/perfil');
         }
 
+        // Validación del teléfono
+        if (!validator.isMobilePhone(telefono, 'es-MX')) {
+            req.flash('message', { type: 'alert-danger', text: 'Teléfono inválido.' });
+            return res.redirect('/perfil');
+        }
+
         // Actualizar los datos del perfil en la base de datos
         await db.execute(
             `UPDATE personas SET Nombre = ?, Apellido = ?, Telefono = ?, Correo = ? 
-             WHERE idPersona = (SELECT idPersona FROM usuarios WHERE idUsuarios = ?)`,
+             WHERE idPersona = (SELECT idPersona FROM usuarios WHERE idUsuarios = ?)` ,
             [nombre, apellido, telefono, correo, req.session.userId]
         );
 
@@ -147,6 +198,7 @@ app.post('/perfil/editar', isAuthenticated, async (req, res) => {
         res.redirect('/perfil');
     }
 });
+
 
 // Ruta para cerrar sesión
 app.get('/logout', (req, res) => {
@@ -160,87 +212,40 @@ app.get('/logout', (req, res) => {
     });
 });
 
-// Otras rutas
+app.get('/admin/salir', (req, res) => {
+    // Verifica si el usuario tiene el rol de administrador
+    if (req.session.userRol === 'admin') {
+        // Cierra la sesión de administrador
+        req.session.destroy(err => {
+            if (err) {
+                console.error('Error al cerrar sesión de administrador:', err);
+                return res.status(500).send({ message: 'Error al cerrar sesión.' });
+            }
+            res.clearCookie('connect.sid'); // Limpia la cookie de sesión
+            res.redirect('/login'); // Redirige al login
+        });
+    } else {
+        // Si el usuario no es administrador, redirige
+        res.status(403).send('Acceso no autorizado');
+    }
+});
+
+
+
+// Ruta para registrarse
 app.get('/registrate', (req, res) => res.render('registrate'));
+
+// Ruta para descuentos
 app.get('/descuentos', (req, res) => res.render('descuentos'));
 
-// Ruta para ver el carrito
-app.get('/carrito', isAuthenticated, (req, res) => {
-    const cart = req.session.cart || [];
-    const total = cart.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-
-    res.render('carrito', { cart, total, message: req.flash('message') });
-});
-
-// Ruta para agregar un producto al carrito
-app.post('/carrito/agregar', isAuthenticated, async (req, res) => {
-    const { productoId, cantidad } = req.body;
-
-    try {
-        const cantidadNumerica = parseInt(cantidad, 10);
-        if (isNaN(cantidadNumerica) || cantidadNumerica <= 0) {
-            return res.status(400).send('Cantidad inválida');
-        }
-
-        const [producto] = await db.execute(
-            `SELECT idProducto, nombreProducto, precio FROM productos WHERE idProducto = ?`,
-            [productoId]
-        );
-
-        if (producto.length === 0) {
-            return res.status(404).send('Producto no encontrado');
-        }
-
-        const item = producto[0];
-        const precioNumerico = parseFloat(item.precio);
-
-        if (!req.session.cart) {
-            req.session.cart = [];
-        }
-
-        const index = req.session.cart.findIndex(p => p.idProducto === item.idProducto);
-
-        if (index !== -1) {
-            req.session.cart[index].cantidad += cantidadNumerica;
-        } else {
-            req.session.cart.push({
-                idProducto: item.idProducto,
-                nombreProducto: item.nombreProducto,
-                precio: precioNumerico,
-                cantidad: cantidadNumerica
-            });
-        }
-
-        res.redirect('/carrito');
-    } catch (err) {
-        console.error('Error al agregar al carrito:', err);
-        res.status(500).send('Error interno del servidor');
-    }
-});
-
-// Ruta para eliminar un producto del carrito
-app.post('/carrito/eliminar', isAuthenticated, (req, res) => {
-    const { productoId } = req.body;
-
-    if (!req.session.cart) {
-        return res.redirect('/carrito');
-    }
-
-    req.session.cart = req.session.cart.filter(item => item.idProducto !== productoId);
-
-    res.redirect('/carrito');
-});
-
-// Ruta para vaciar el carrito
-app.post('/carrito/vaciar', isAuthenticated, (req, res) => {
-    req.session.cart = [];
-    res.redirect('/carrito');
-});
-
-// Middleware de manejo de errores
+// Middleware global de manejo de errores
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).send('Upss, Error!');
+    const status = err.status || 500;
+    const message = process.env.NODE_ENV === 'production' 
+        ? 'Ocurrió un error, por favor intenta más tarde.' 
+        : err.message;
+    res.status(status).send({ error: { message, status } });
 });
 
 // Inicia el servidor

@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../../config/dbConnection'); // Conexión a la base de datos
+const db = require('../../config/dbConnection');  // Conexión a la base de datos
 
+// Ruta para buscar productos
 // Ruta para buscar productos
 router.get('/', async (req, res) => {
     const { search } = req.query;
@@ -18,5 +19,6 @@ router.get('/', async (req, res) => {
         res.status(500).send('Error interno del servidor');
     }
 });
+
 
 module.exports = router;

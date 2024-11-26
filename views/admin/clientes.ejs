@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Productos</title>
+    <link rel="stylesheet" href="/styles/stylesAdmin.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   
+</head>
+<body>
+    <div class="container">
+        <!-- Barra lateral -->
+        <div class="sidebar">
+            <h2>Panel</h2>
+            <a href="/admin">Productos</a>
+            <a href="/admin/clientes">Clientes</a>
+            <a href="/admin/personal">Personal</a>
+            <a href="/admin/pedidos">Pedidos</a>
+            <a href="/admin/Salir">Salir</a>
+        </div>
+
+        <div class="main-content">
+            <!-- Botón para ocultar/mostrar la barra lateral -->
+            <button class="toggle-sidebar">☰</button>
+        
+            <h1>Gestión de Clientes</h1>
+            <!-- Contenedor de la tabla -->
+           
+                <table id="table-clientes">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Teléfono</th>
+                            <th>Correo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% clientes.forEach(cliente => { %>
+                            <tr>
+                                <td><%= cliente.idCliente %></td>
+                                <td><%= cliente.Nombre %></td>
+                                <td><%= cliente.Apellido %></td>
+                                <td><%= cliente.Telefono %></td>
+                                <td><%= cliente.Correo %></td>
+                                <td>
+                                    <a href="/admin/clientes/editar/<%= cliente.idCliente %>">Editar</a>
+                                    <a href="/admin/clientes/eliminar/<%= cliente.idCliente %>" onclick="return confirm('¿Seguro que deseas eliminar este cliente?')">Eliminar</a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+          
+        
+            <!-- Paginación -->
+            <div class="pagination">
+                <button id="prev-page" disabled>Anterior</button>
+                <button id="next-page">Siguiente</button>
+            </div>
+            <div id="mensaje"></div>
+        </div>
+
+        
+    </div>
+</body>
+<script>
+    $(document).ready(function() {
+        // Alternar barra lateral
+        $('.toggle-sidebar').click(function() {
+            $('.sidebar').toggleClass('hidden');
+            $('.main-content').toggleClass('full-width');
+        });
+
+    });
+   
+</script>
+</html>

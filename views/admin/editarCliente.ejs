@@ -1,0 +1,16 @@
+<h1>Editar Cliente</h1>
+<form action="/admin/clientes/editar/<%= cliente.idCliente %>" method="POST">
+    <label for="Nombre">Nombre</label>
+    <input type="text" name="Nombre" value="<%= cliente.Nombre %>" required>
+
+    <label for="Apellido">Apellido</label>
+    <input type="text" name="Apellido" value="<%= cliente.Apellido %>" required>
+
+    <label for="Telefono">Teléfono</label>
+    <input type="text" name="Telefono" value="<%= cliente.Telefono %>" required>
+
+    <label for="Correo">Correo</label>
+    <input type="email" name="Correo" value="<%= cliente.Correo %>" required>
+
+    <button type="submit">Guardar Cambios</button>
+</form>

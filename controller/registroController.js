@@ -6,6 +6,10 @@ const router = express.Router();
 router.post('/registrate', (req, res) => {
     const { nombre, apellido, telefono, correo, nombreUsuario, contraseña } = req.body;
 
+    // Obtener el idPersona de la persona recién insertada
+const idPersona = result.insertId;
+console.log(`idPersona obtenido: ${idPersona}`);  // Verifica si está obteniendo el valor correcto
+
     // Verificar si ya existe un correo registrado
     db.query('SELECT * FROM personas WHERE correo = ?', [correo], (err, results) => {
         if (err) {
@@ -25,29 +29,30 @@ router.post('/registrate', (req, res) => {
             }
 
             // Insertar la persona en la base de datos
-            db.query('INSERT INTO personas (nombre, apellido, telefono, correo) VALUES (?, ?, ?, ?)', 
-                [nombre, apellido, telefono, correo], (err, result) => {
-                    if (err) {
-                        console.error('Error al insertar persona:', err);
-                        return res.status(500).send('Error al registrar persona');
-                    }
-
-                    // Obtener el idPersona de la persona recién insertada
-                    const idPersona = result.insertId;
-
-                    // Insertar el usuario en la tabla usuarios con idPersona y la contraseña cifrada
-                    db.query('INSERT INTO usuarios (idPersona, contraseña, nombreUsuario, userRol) VALUES (?, ?, ?, ?)', 
-                        [idPersona, hashedPassword, nombreUsuario, 'usuario'], (err) => {
-                            if (err) {
-                                console.error('Error al insertar usuario:', err);
-                                return res.status(500).send('Error al registrar usuario');
-                            }
-
-                            res.redirect('/login'); // Redirigir al login después del registro exitoso
-                        });
+            db.query('INSERT INTO clientes (idPersona) VALUES (?)', [idPersona], (err, result) => {
+                if (err) {
+                    console.error('Error al registrar cliente:', err);
+                    return res.status(500).send('Error al registrar cliente');
+                }
+                
+                // Verificar que el cliente se haya insertado correctamente
+                console.log(`Cliente creado con idPersona: ${idPersona}`);
+                
+                // Insertar el usuario en la tabla usuarios
+                db.query('INSERT INTO usuarios (idPersona, contraseña, nombreUsuario, userRol) VALUES (?, ?, ?, ?)', 
+                    [idPersona, hashedPassword, nombreUsuario, 'usuario'], (err) => {
+                        if (err) {
+                            console.error('Error al insertar usuario:', err);
+                            return res.status(500).send('Error al registrar usuario');
+                        }
+            
+                        res.redirect('/login'); // Redirigir al login después del registro exitoso
+                    });
+            });
+            
                 });
         });
     });
-});
+
 
 module.exports = router;

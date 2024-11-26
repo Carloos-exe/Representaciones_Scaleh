@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Productos</title>
+    <link rel="stylesheet" href="/styles/stylesAdmin.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   
+</head>
+<body>
+    <div class="container">
+        <!-- Barra lateral -->
+        <div class="sidebar">
+            <h2>Panel</h2>
+            <a href="/admin">Productos</a>
+            <a href="/admin/clientes">Clientes</a>
+            <a href="/admin/personal">Personal</a>
+            <a href="/admin/pedidos">Pedidos</a>
+            <a href="/admin/Salir">Salir</a>
+        </div>
+
+        <!-- Contenido principal -->
+        <div class="main-content">
+            <!-- Botón para ocultar/mostrar la barra lateral -->
+            <button class="toggle-sidebar">☰</button>
+
+            <h1>Gestión de Productos</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                        <th>Imagen</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="productos-tbody">
+                    <!-- Los datos se llenan dinámicamente -->
+                </tbody>
+            </table>
+
+            <!-- Paginación -->
+            <div class="pagination">
+                <button id="prev-page" disabled>Anterior</button>
+                <button id="next-page">Siguiente</button>
+            </div>
+
+            <!-- Formulario para añadir producto -->
+            <h2>Añadir Producto</h2>
+            <form id="crearProductoForm">
+                <input type="text" name="nombre" placeholder="Nombre del producto" required>
+                <input type="text" name="descripcion" placeholder="Descripción" required>
+                <input type="number" name="precio" placeholder="Precio" step="0.01" required>
+                <input type="text" name="imagenUrl" placeholder="URL de la imagen" required>
+                <input type="text" name="idCategoria" placeholder="ID de la categoría">
+                <input type="text" name="marca" placeholder="Marca" required>
+                <button type="submit">Añadir Producto</button>
+            </form>
+
+            <div id="mensaje"></div>
+        </div>
+
+        
+    </div>
+</body>
+
+
+    <script>
+        $(document).ready(function() {
+            // Alternar barra lateral
+            $('.toggle-sidebar').click(function() {
+                $('.sidebar').toggleClass('hidden');
+                $('.main-content').toggleClass('full-width');
+            });
+        
+            // Variables para la paginación
+            const productos = <%- productos %>; // Esto convierte el JSON en un objeto de JavaScript
+
+            const itemsPerPage = 10;  // Establece cuántos productos por página
+            let currentPage = 1;
+        
+            function renderProductos() {
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const productosPagina = productos.slice(startIndex, endIndex);
+                
+                const tbody = $('#productos-tbody');
+                tbody.empty();
+            
+                productosPagina.forEach(function(producto) {
+                    tbody.append(`
+                        <tr>
+                            <td>${producto.idProducto}</td> <!-- Cambié id por idProducto -->
+                            <td>${producto.nombre}</td>
+                            <td>${producto.descripcion}</td>
+                            <td>$${typeof producto.precio === 'number' ? producto.precio.toFixed(2) : '0.00'}</td>
+                            <td><img src="${producto.imagenUrl}" alt="${producto.nombre}" width="50"></td>
+                            <td>
+                                <a href="/admin/editar/${producto.idProducto}">Editar</a> |
+                                <a href="/admin/eliminar/${producto.idProducto}">Eliminar</a>
+                            </td>
+                        </tr>
+                    `);
+                });
+            
+                // Actualizar estado de los botones
+                $('#prev-page').prop('disabled', currentPage === 1);
+                $('#next-page').prop('disabled', endIndex >= productos.length);
+            }
+            
+            // Eventos de paginación
+            $('#prev-page').click(function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderProductos();
+                }
+            });
+        
+            $('#next-page').click(function() {
+                if (currentPage * itemsPerPage < productos.length) {
+                    currentPage++;
+                    renderProductos();
+                }
+            });
+        
+            // Render inicial de productos
+            renderProductos();
+        
+            // Enviar formulario de creación de producto
+            $('#crearProductoForm').submit(function(e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+        
+                $.ajax({
+                    url: '/admin/crear',
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        $('#mensaje').html('<p>' + response.message + '</p>').css('color', 'green');
+                        $('#crearProductoForm')[0].reset();
+                    },
+                    error: function(xhr, status, error) {
+                        var errMsg = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : "Hubo un error al crear el producto. Inténtalo de nuevo.";
+                        $('#mensaje').html('<p>' + errMsg + '</p>').css('color', 'red');
+                    }
+                });
+            });
+        });
+        
+    </script>
+
+</html>

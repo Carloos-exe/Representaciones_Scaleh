@@ -30,6 +30,8 @@ exports.verPerfil = (req, res) => {
     );
 };
 
+
+
 // Editar perfil
 exports.editarPerfil = (req, res) => {
     const userId = req.session.userId;
@@ -64,3 +66,46 @@ exports.editarPerfil = (req, res) => {
         }
     );
 };
+
+
+// productosController.js
+
+const productosController = {
+    // Función para mostrar productos con paginación
+    async mostrarProductos(req, res) {
+        const productosPorPagina = 10;  // Número de productos por página
+        const pagina = parseInt(req.query.pagina) || 1;  // Página actual (por defecto, página 1)
+
+        // Calcular el índice de inicio de la consulta
+        const inicio = (pagina - 1) * productosPorPagina;
+
+        try {
+            // Obtener los productos de la base de datos (paginados)
+            const productos = await db.query('SELECT * FROM productos LIMIT ?, ?', [inicio, productosPorPagina]);
+
+            // Asegurarse de que cada precio se convierte a número
+            productos.forEach(producto => {
+                producto.precio = parseFloat(producto.precio); // Asegura que el precio sea un número
+            });
+
+            // Obtener el total de productos para calcular cuántas páginas son necesarias
+            const [totalProductos] = await db.query('SELECT COUNT(*) AS total FROM productos');
+            const totalPáginas = Math.ceil(totalProductos[0].total / productosPorPagina);
+
+            // Renderizar la vista con los productos y la información de la paginación
+            res.render('principal/productos', {
+                productos,
+                pagina,
+                totalPáginas
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send("Error al obtener los productos");
+        }
+    }
+};
+
+
+
+module.exports = productosController;
+

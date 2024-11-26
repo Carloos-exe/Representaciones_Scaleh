@@ -3,486 +3,464 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Distribuidora Scale</title>
+    <meta name="description" content="Distribuidora Scaleh: Tu mejor opción en ferretería con entrega rápida y asesoría técnica. Encuentra productos de calidad para tus proyectos.">
+    <meta name="keywords" content="ferretería, materiales, asesoría técnica, entrega rápida, calidad, productos de ferretería">
+    <meta name="author" content="Distribuidora Scaleh">
+    <title>Distribuidora Scaleh</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         /* Reset */
-        /* Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+        /* General Styles */
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
 
-/* General Styles */
-body {
-    font-family: 'Poppins', Arial, sans-serif;
-    color: #333;
-    line-height: 1.6;
-}
+        a {
+            text-decoration: none;
+        }
 
-/* Navbar */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #FF7F32; /* Naranja */
-    padding: 20px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        nav{
+            display: flex;
+            width: 100%;
+            background: #FF7F32;
+            position: relative;
+            justify-content: space-between;
+            text-align: center;
+            padding: 15px 30px;
+        }
+        
+        nav .icon{
+            font-size: 30px;
+            font-weight: 800;
+            color: aliceblue;
+            cursor: pointer;
+        }
+        
+        nav ol{
+            display: flex;
+            list-style: none;
+            margin: auto 0;
+        }
+        
+        nav ol li{
+            margin: 0 2px
+        }
+        
+        nav ol li a{
+            color: aliceblue;
+            font-size: 20px;
+            text-decoration: none;
+            text-transform: capitalize;
+            letter-spacing: 1px;
+            padding: 5px 10px;
+        
+        }
+        
+        
+        nav ol li:hover a{
+            background: #fff;
+            color: #0a5071;
+        
+        }
+        
+        /* Para el sub menu de productos*/
+        nav ol li ul {
+            display: none;
+            position: absolute;
+            background-color: rgba(255, 0, 0, 0.9); /* Fondo rojo semi-transparente */
+            padding: 10px;
+            margin-top: 10px;
+            list-style: none;
+            border-radius: 8px; /* Esquinas redondeadas */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para dar profundidad */
+            transition: all 0.3s ease-in-out; /* Transición suave */
+        }
+        
+        nav ol li:hover ul {
+            display: block;
+        }
+        
+        nav ol li ul li {
+            margin: 10px 0; /* Más espaciado entre las categorías */
+        }
+        
+        nav ol li ul li a {
+            padding: 8px 20px;
+            font-size: 18px;
+            display: block;
+            border-radius: 4px; /* Esquinas redondeadas */
+            transition: background-color 0.3s ease-in-out; /* Transición suave al hover */
+        }
+        
+        nav ol li ul li a:hover {
+            background-color: #fff;
+            color: #0a5071;
+        }
+        
+        /* Aquí termina el sub menu de productos*/
+        
+        nav .search_box{
+            display: flex;
+            margin:auto 0;
+            height: 35px;
+             line-height: 35px; 
+        }
+        
+        nav .search_box{
+            display: flex;
+            margin:auto;
+            height: 35px;
+            line-height: 35px;
+        }
+        
+        
+        nav .search_box input{
+            border: none;
+            outline: none;
+            background: #fff;
+            height: 100%;
+            padding: 0 10 px;
+            font-size: 20px;
+            width: 350px;
+        }
+        
+        nav .search_box span{
+            color: maroon;
+            font-size: 20px;
+            background: white;
+            height: 100%;
+            padding: 8px;
+            position: relative;
+            cursor: pointer;
+            z-index: 1;
+        }
+        
+        
+        nav .search_box span::after{
+            height: 100%;
+            width: 0%;
+            content: " ";
+            background:orange;
+            position:absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            transition: 0.3s;
+        }
+        
+        nav .search_box span:hover:after{
+        width: 100%;
+        }
+        
+        nav .bar {
+            position:relative;
+            margin: auto;
+            display: none;
+        }
+        
+        nav.bar span{
+            position: absolute;
+            color: #fff;
+            font-size: 35px;
+        }
 
-.navbar a {
-    color: #fff;
-    text-decoration: none;
-    margin: 0 15px;
-    font-weight: bold;
-}
+        /* Hero Section with Slideshow */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            overflow: hidden;
+        }
 
-.navbar .logo {
-    font-size: 1.5em;
-    color: #fff;
-}
+        .hero .slideshow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
 
-/* Hero Section */
-.hero {
-    position: relative;
-    background-image: url('https://i.ibb.co/0jmYW1j/Imagen-de-Whats-App-2024-11-15-a-las-18-29-16-4f75c611.jpg'); /* Imagen de fondo */
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: white;
-    z-index: 1;
-}
+        .hero .slideshow img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            animation: slideShow 15s infinite;
+        }
 
-/* Capa de opacidad */
-.hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: -1;
-}
+        .hero .slideshow img:nth-child(1) {
+            animation-delay: 0s;
+        }
 
-.hero-content {
-    max-width: 600px;
-}
+        .hero .slideshow img:nth-child(2) {
+            animation-delay: 5s;
+        }
 
-.hero h1 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-}
+        .hero .slideshow img:nth-child(3) {
+            animation-delay: 10s;
+        }
 
-.hero p {
-    font-size: 1.2em;
-    margin-bottom: 30px;
-}
+        @keyframes slideShow {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            40% { opacity: 1; }
+            60% { opacity: 0; }
+            100% { opacity: 0; }
+        }
 
-.hero button {
-    padding: 10px 20px;
-    font-size: 1em;
-    color: #FF7F32;
-    background-color: #fff;
-    border: 2px solid #FF7F32;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+        .hero-content {
+            max-width: 600px;
+            animation: fadeIn 2s ease;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5); /* Added a dark overlay for text contrast */
+            border-radius: 10px;
+        }
 
-.hero button:hover {
-    background-color: #FF7F32;
-    color: #fff;
-}
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        }
 
-/* Products Section */
-.products {
-    padding: 50px 20px;
-    text-align: center;
-    background-color: #f9f9f9;
-}
+        .hero p {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+        }
 
-.products h2 {
-    color: #FF7F32;
-    margin-bottom: 20px;
-}
+        .hero button {
+            padding: 10px 20px;
+            font-size: 1em;
+            color: #FF7F32;
+            background-color: #fff;
+            border: 2px solid #FF7F32;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
 
-.container {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 20px;
-}
+        .hero button:hover {
+            background-color: #FF7F32;
+            color: #fff;
+            transform: scale(1.1);
+        }
 
-.product-card {
-    width: 22%;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    background-color: #fff;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
+        /* Services Section */
+        .services {
+            padding: 50px 20px;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
 
-.product-card img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-}
+        .services h2 {
+            color: #FF7F32;
+            margin-bottom: 20px;
+        }
 
-.product-card h2 {
-    font-size: 1.2em;
-    margin: 10px 0;
-}
+        .service-item {
+            display: inline-block;
+            text-align: left;
+            width: 250px;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
 
-.product-card p {
-    font-size: 1em;
-    margin: 5px 0;
-    color: #555;
-}
+        .service-item i {
+            font-size: 2em;
+            color: #FF7F32;
+            margin-bottom: 10px;
+        }
 
-.product-card button {
-    background-color: #FF7F32;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
+        .service-item:hover {
+            transform: translateY(-5px); /* Hover effect */
+        }
 
-.product-card button:hover {
-    background-color: darkred;
-}
+        /* Floating WhatsApp Button */
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            font-size: 1.5em;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            transition: transform 0.3s;
+        }
 
-.product-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
+        .whatsapp-btn:hover {
+            transform: scale(1.1);
+        }
 
-/* Benefits Section */
-.benefits {
-    padding: 50px 20px;
-    text-align: center;
-    background-color: #fff;
-}
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 1em;
+        }
 
-.benefits h2 {
-    color: #FF7F32;
-    margin-bottom: 20px;
-}
+        footer a {
+            color: #FF7F32;
+            text-decoration: none;
+        }
 
-.benefit-item {
-    margin: 20px 0;
-}
+        footer a:hover {
+            text-decoration: underline;
+        }
 
-/* Contact Section */
-.contact {
-    padding: 50px 20px;
-    text-align: center;
-    background-color: #f9f9f9;
-}
+        /* Floating Social Buttons */
+        .social-btn {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: white;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            transition: transform 0.3s, opacity 0.3s;
+        }
 
-.contact h2 {
-    color: #FF7F32;
-    margin-bottom: 20px;
-}
+        .social-btn:hover {
+            transform: scale(1.1);
+        }
 
-.contact-form {
-    max-width: 500px;
-    margin: 0 auto;
-}
-
-.contact-form input,
-.contact-form textarea {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.contact-form button {
-    padding: 10px 20px;
-    background-color: #FF7F32;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.contact-form button:hover {
-    background-color: darkorange;
-}
-
-/* Footer CTA */
-.footer-cta {
-    background-color: #FF7F32;
-    color: #fff;
-    padding: 30px;
-    text-align: center;
-}
-
-.footer-cta p {
-    font-size: 1.2em;
-    margin-bottom: 10px;
-}
-
-.footer-cta button {
-    padding: 10px 20px;
-    background-color: #fff;
-    color: #FF7F32;
-    border: 2px solid #fff;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.footer-cta button:hover {
-    background-color: darkorange;
-    color: #fff;
-}
-
-nav{
-    display: flex;
-    width: 100%;
-    background: #FF7F32;
-    position: relative;
-    justify-content: space-between;
-    text-align: center;
-    padding: 15px 30px;
-}
-
-nav .icon{
-    font-size: 30px;
-    font-weight: 800;
-    color: aliceblue;
-    cursor: pointer;
-}
-
-nav ol{
-    display: flex;
-    list-style: none;
-    margin: auto 0;
-}
-
-nav ol li{
-    margin: 0 2px
-}
-
-nav ol li a{
-    color: aliceblue;
-    font-size: 20px;
-    text-decoration: none;
-    text-transform: capitalize;
-    letter-spacing: 1px;
-    padding: 5px 10px;
-
-}
-
-
-nav ol li:hover a{
-    background: #fff;
-    color: #0a5071;
-
-}
-
-/* Para el sub menu de productos*/
-nav ol li ul {
-    display: none;
-    position: absolute;
-    background-color: rgba(255, 0, 0, 0.9); /* Fondo rojo semi-transparente */
-    padding: 10px;
-    margin-top: 10px;
-    list-style: none;
-    border-radius: 8px; /* Esquinas redondeadas */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para dar profundidad */
-    transition: all 0.3s ease-in-out; /* Transición suave */
-}
-
-nav ol li:hover ul {
-    display: block;
-}
-
-nav ol li ul li {
-    margin: 10px 0; /* Más espaciado entre las categorías */
-}
-
-nav ol li ul li a {
-    padding: 8px 20px;
-    font-size: 18px;
-    display: block;
-    border-radius: 4px; /* Esquinas redondeadas */
-    transition: background-color 0.3s ease-in-out; /* Transición suave al hover */
-}
-
-nav ol li ul li a:hover {
-    background-color: #fff;
-    color: #0a5071;
-}
-
-/* Aquí termina el sub menu de productos*/
-
-nav .search_box{
-    display: flex;
-    margin:auto 0;
-    height: 35px;
-     line-height: 35px; 
-}
-
-nav .search_box{
-    display: flex;
-    margin:auto;
-    height: 35px;
-    line-height: 35px;
-}
-
-
-nav .search_box input{
-    border: none;
-    outline: none;
-    background: #fff;
-    height: 100%;
-    padding: 0 10 px;
-    font-size: 20px;
-    width: 350px;
-}
-
-nav .search_box span{
-    color: maroon;
-    font-size: 20px;
-    background: white;
-    height: 100%;
-    padding: 8px;
-    position: relative;
-    cursor: pointer;
-    z-index: 1;
-}
-
-
-nav .search_box span::after{
-    height: 100%;
-    width: 0%;
-    content: " ";
-    background:orange;
-    position:absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    transition: 0.3s;
-}
-
-nav .search_box span:hover:after{
-width: 100%;
-}
-
-nav .bar {
-    position:relative;
-    margin: auto;
-    display: none;
-}
-
-nav.bar span{
-    position: absolute;
-    color: #fff;
-    font-size: 35px;
-}
-
-
+        .facebook-btn { bottom: 90px; background-color: #4267B2; }
+        .instagram-btn { bottom: 160px; background-color: #C13584; }
+        .whatsapp-btn { background-color: #25D366; }
     </style>
 </head>
 <body>
-       
-        <nav>
-            <div class="icon">Distribuciones <b style="color: black;">Scaleh</b></div>
-            <div class="search-bar">
-            </div>
-            <ol>
-                <li><a href="/">Inicio</a></li>
-                <!-- <li><a href="/descuentos">Descuentos</a></li> -->
-                <li><a href="/productos">Productos</a>
-                    <!-- <ul> 
-                        <li><a href="#">Construcción</a></li>
-                        <li><a href="#">Fontanería</a></li>
-                        <li><a href="#">Electricidad</a></li>
-                        <li><a href="#">Cisternas</a></li>
-                        <li><a href="#">Tubería</a></li>
-                    </ul>-->
-                </li>
-                <li><a href="/login">Inicia Sesión</a></li>
-            </ol>
-            <label for="check" class="bar">
-                <span class="fa fa-bars" id="bars"></span>
-                <span class="fa fa-times" id="times"></span>
-            </label>
-        </nav>
 
-    </div>
+    <nav>
+        <div class="icon">Distribuciones <b style="color: black;">Scaleh</b></div>
+        <div class="search-bar">
+        </div>
+        <ol>
+            <li><a href="/">Inicio</a></li>
+            <!-- <li><a href="/descuentos">Descuentos</a></li> -->
+            <li><a href="/productos">Productos</a>
+            </li>
+            <li><a href="/login">Inicia Sesión</a></li>
+        </ol>
+        <label for="check" class="bar">
+            <span class="fa fa-bars" id="bars"></span>
+            <span class="fa fa-times" id="times"></span>
+        </label>
+    </nav>
 
-    <!-- Hero Section -->
+
+
     <div class="hero">
+        <div class="slideshow">
+            <img src="https://ipasa.mx/wp-content/uploads/2023/11/tubo-galvanizado-2-1024x768.webp" alt="Imagen 1">
+            <img src="/img/ferreteria/tinaco1.jpg" alt="Imagen 2">
+            <img src="/img/ferreteria/tinaco2.jpg" alt="Imagen 3">
+        </div>
         <div class="hero-content">
-            <h1>Materiales de Plomería y Ferretería de Calidad </h1>
-            <p>Proveemos todo lo que necesitas para ferretería</p>
-            <button><a href="/productos">Explora nuestros productos</a></button>
+            <h1>Tu Mejor Aliado en Ferretería</h1>
+            <p>Encuentra lo que necesitas para tu ferreteria, con la mejor calidad y asesoría.</p>
+            <button>Ver Más</button>
         </div>
     </div>
 
-    <!-- Product Section -->
-    <div class="products">
-        <h2>Productos Destacados</h2>
-        <div class="product-item">
-            <h3>Tinacos</h3>
-            <p>Amplia gama de tinacos de diversas capacidades, materiales, y marcas ideales para almacenamiento seguro de agua.</p>
+    <section class="services">
+        <h2>Nuestros Servicios</h2>
+        <div class="service-item">
+            <i class="fas fa-truck"></i>
+            <h3>Envíos Rápidos</h3>
+            <p>Recibe tu pedido en tiempo récord.</p>
         </div>
-        <div class="product-item">
-            <h3>Tuberías y Conexiones</h3>
-            <p>Material resistente y confiable para tus instalaciones de agua, gas y drenaje.</p>
+        <div class="service-item">
+            <i class="fas fa-tools"></i>
+            <h3>Asesoría Técnica</h3>
+            <p>Contamos con expertos para guiarte.</p>
         </div>
-        <div class="product-item">
-            <h3>Tejas y Techos</h3>
-            <p>Variedad de tejas y materiales para techos, perfectos para acabados duraderos y estéticos.</p>
+        <div class="service-item">
+            <i class="fas fa-box-open"></i>
+            <h3>Productos de Calidad</h3>
+            <p>Todo lo que necesitas, con garantía.</p>
         </div>
-    </div>
+    </section>
 
-    <!-- Benefits Section -->
-    <div class="benefits">
-        <h2>¿Por Qué Elegirnos?</h2>
-        <div class="benefit-item">
-            <p><strong>Calidad y Durabilidad:</strong> Nuestros productos están hechos para durar y resistir.</p>
-        </div>
-        <div class="benefit-item">
-            <p><strong>Distribución Rápida y Confiable:</strong> Entrega puntual para que tus proyectos no se detengan.</p>
-        </div>
-        <div class="benefit-item">
-            <p><strong>Asesoría Técnica:</strong> Nuestro equipo está listo para ayudarte a elegir los productos adecuados.</p>
-        </div>
-    </div>
+    <footer>
+        <p>&copy; 2024 Distribuidora Scaleh | Todos los derechos reservados.</p>
+        <p><a href="#">Política de Privacidad</a> | <a href="#">Términos y Condiciones</a></p>
+    </footer>
 
-    <!-- Contact Section -->
-    <div class="contact">
-        <h2>Contacto</h2>
-        <div class="contact-form">
-            <input type="text" placeholder="Nombre" required>
-            <input type="email" placeholder="Correo electrónico" required>
-            <input type="tel" placeholder="Teléfono">
-            <textarea placeholder="Mensaje o consulta" required></textarea>
-            <button>Enviar Mensaje</button>
-        </div>
-    </div>
+       <!-- Floating WhatsApp Button -->
+       <a href="https://wa.me/5513596290" class="social-btn whatsapp-btn" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    <a href="https://www.facebook.com/profile.php?id=61566490556690&sk=about" class="social-btn facebook-btn" target="_blank">
+        <i class="fab fa-facebook-f"></i>
+    </a>
+    <a href="https://www.instagram.com/scalehdistribucionesferreteras/" class="social-btn instagram-btn" target="_blank">
+        <i class="fab fa-instagram"></i>
+    </a>
+    <style>
+        /* Floating Social Buttons */
+        .social-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: white;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            transition: transform 0.3s, opacity 0.3s;
+        }
 
-    <!-- Footer CTA -->
-    <div class="footer-cta">
-        <h2>¿Listo para empezar?</h2>
-        <p>Contáctanos y obtén los mejores materiales</p>
-        <p><a href="https://www.facebook.com/profile.php?id=61566490556690&sk=about" target="_blank">Visítanos en Facebook</a></p>
-        
-        <p><a href="https://www.instagram.com/scalehdistribucionesferreteras/" target="_blank">Síguenos en Instagram</a></p>
-    </div>
+        .social-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Spacing for buttons */
+        .facebook-btn { bottom: 90px; background-color: #4267B2; }
+        .instagram-btn { bottom: 160px; background-color: #C13584; }
+        .whatsapp-btn { background-color: #25D366; }
+    </style>
 
 </body>
 </html>

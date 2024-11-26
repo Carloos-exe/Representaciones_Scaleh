@@ -1,0 +1,198 @@
+/* Estilo del contenedor general */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Barra lateral */
+.sidebar {
+    width: 200px; /* Ancho estándar */
+    background-color: #333;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    position: fixed;
+    top: 0;
+    height: 100vh;
+    bottom: 0;
+    left: 0;
+    transition: transform 0.3s ease; /* Suaviza la animación */
+    z-index: 1000; /* Asegura que esté sobre el contenido */
+    overflow: auto;
+}
+
+.sidebar.hidden {
+    transform: translateX(-100%); /* Oculta la barra lateral */
+}
+
+/* Encabezado de la barra lateral */
+.sidebar h2 {
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #575757;
+}
+
+/* Botón para ocultar/mostrar la barra lateral */
+.toggle-sidebar {
+    background-color: #007BFF;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100; /* Encima de la barra lateral */
+    border-radius: 5px;
+}
+
+.toggle-sidebar:hover {
+    background-color: #0056b3;
+}
+
+/* Contenido principal */
+.main-content {
+    flex: 1; /* Toma el espacio restante */
+    margin-left: 250px; /* Ajuste según el ancho de la barra lateral */
+    padding: 20px;
+    transition: margin-left 0.3s ease; /* Suaviza la transición */
+}
+
+.main-content.full-width {
+    margin-left: 0; /* Ajuste cuando la barra lateral está oculta */
+}
+
+/* Tabla general (Dashboard de productos) */
+table {
+    width: 90%; /* Ajustar según el ancho deseado */
+    max-width: 100%; /* Asegura que no exceda el ancho de la pantalla */
+    border-collapse: collapse;
+    margin: 0 auto 40px; /* Centra la tabla y mantiene el margen inferior */
+    box-sizing: border-box; /* Evita desbordes inesperados */
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 12px; /* Aumenta el espacio interno para mejor legibilidad */
+    text-align: left;
+}
+
+table th {
+    background-color: #f4f4f4;
+}
+
+table td {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1; /* Efecto hover para filas */
+}
+
+/* Tabla de Clientes (centrado específico) */
+#table-clientes {
+    width: 100%; /* La tabla ocupará todo el ancho disponible */
+    max-width: 900px; /* Máximo ancho para la tabla (ajustar según lo que necesites) */
+    margin: 0 auto; /* Centrado automático en el contenedor */
+    border-collapse: collapse;
+}
+
+#table-clientes th, #table-clientes td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+#table-clientes th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+#table-clientes td {
+    background-color: #fff;
+}
+
+#table-clientes a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+#table-clientes a:hover {
+    text-decoration: underline;
+}
+
+/* Paginación */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 0 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.pagination button:hover {
+    background-color: #0056b3;
+}
+
+.pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Mensaje */
+#mensaje {
+    margin-top: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+.full-width {
+    width: 100%;
+}
+
+/* Media queries para responsividad */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 250px;
+    }
+
+    /* Asegura que la tabla sea responsiva en pantallas pequeñas */
+    table {
+        width: 100%;
+        font-size: 14px; /* Reduce el tamaño de la fuente en pantallas pequeñas */
+    }
+
+    table th, table td {
+        padding: 8px; /* Reducir el relleno para mejor ajuste */
+    }
+
+    .toggle-sidebar {
+        display: block; /* Mostrar el botón para ocultar/mostrar barra lateral */
+    }
+}

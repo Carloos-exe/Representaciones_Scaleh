@@ -46,11 +46,19 @@ router.post('/', async (req, res) => {
             [nombre, apellido, telefono || null, correo]
         );
 
+        // Obtener el idPersona generado
+        const idPersona = personaResult.insertId;
+
         // Insertar datos en la tabla usuarios
-        const idPersona = personaResult.insertId; // Obtener el idPersona generado
         await db.execute(
             'INSERT INTO usuarios (idPersona, contraseña, nombreUsuario, userRol) VALUES (?, ?, ?, ?)',
             [idPersona, hashedPassword, nombreUsuario, 'cliente'] // Asignar rol "cliente" por defecto
+        );
+
+        // Insertar datos en la tabla clientes
+        await db.execute(
+            'INSERT INTO clientes (idPersona) VALUES (?)',
+            [idPersona] // Relacionar la persona con el cliente
         );
 
         // Redirigir al login o enviar respuesta de éxito

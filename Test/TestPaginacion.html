@@ -39,29 +39,41 @@
         <div class="product-catalog">
             <% if (productos && productos.length > 0) { %>
                 <% productos.forEach((producto, index) => { %>
+                    <!-- Crear una nueva fila cada 4 productos -->
                     <% if (index % 4 === 0) { %>
                         <div class="product-row">
                     <% } %>
-                    
-                    <div class="product-card">
-                        <% if (producto.imagenUrl) { %>
-                            <img src="<%= producto.imagenUrl %>" alt="<%= producto.nombreProducto %>">
+    
+                    <div class="product-catalog">
+                        <% if (productos && productos.length > 0) { %>
+                            <% productos.forEach((producto) => { %>
+                                <div class="product-card">
+                                    <% if (producto.imagenUrl) { %>
+                                        <img src="/img/productos/<%= producto.imagenUrl %>" alt="<%= producto.nombreProducto %>" class="product-image">
+                                    <% } else { %>
+                                        <img src="/img/default-product.jpg" alt="Imagen no disponible" class="product-image">
+                                    <% } %>
+                                    <div class="product-info">
+                                        <h2><%= producto.nombreProducto %></h2>
+                                        <p><strong>Descripción:</strong> <%= producto.descripcionProducto %></p>
+                                        <p><strong>Precio:</strong> $<%= isNaN(Number(producto.precio)) ? 'N/A' : Number(producto.precio).toFixed(2) %></p>
+                                        
+                                        <!-- Formulario para agregar al carrito -->
+                                        <form action="/carrito/agregar" method="POST" class="add-to-cart-form">
+                                            <input type="hidden" name="productoId" value="<%= producto.idProducto %>">
+                                            <label for="cantidad-<%= producto.idProducto %>">Cantidad:</label>
+                                            <input type="number" name="cantidad" id="cantidad-<%= producto.idProducto %>" value="1" min="1" required>
+                                            <button type="submit">Agregar al Carrito</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            <% }); %>
                         <% } else { %>
-                            <img src="/img/default-product.jpg" alt="imagen no disponible">
+                            <p>No se encontraron productos disponibles.</p>
                         <% } %>
-                        <h2><%= producto.nombreProducto %></h2>
-                        <p><strong>Descripción:</strong> <%= producto.descripcionProducto %></p>
-                        <p><strong>Precio:</strong> $<%= isNaN(Number(producto.precio)) ? 'N/A' : Number(producto.precio).toFixed(2) %></p>
-                        
-                        <!-- Formulario para agregar al carrito -->
-                        <form action="/carrito/agregar" method="POST" class="add-to-cart-form">
-                            <input type="hidden" name="productoId" value="<%= producto.idProducto %>">
-                            <label for="cantidad-<%= producto.idProducto %>">Cantidad:</label>
-                            <input type="number" name="cantidad" id="cantidad-<%= producto.idProducto %>" value="1" min="1" required>
-                            <button type="submit">Agregar al Carrito</button>
-                        </form>
                     </div>
                     
+    
                     <% if ((index + 1) % 4 === 0 || index === productos.length - 1) { %>
                         </div>
                     <% } %>
@@ -71,30 +83,23 @@
             <% } %>
         </div>
     
-        <% if (typeof totalPaginas !== 'undefined' && totalPaginas > 1) { %>
-            <div class="pagination">
-                <% if (pagina > 1) { %>
-                    <a href="?pagina=<%= pagina - 1 %>">&laquo; Anterior</a>
-                <% } %>
-                
-                <% for (let i = 1; i <= totalPaginas; i++) { %>
-                    <a href="?pagina=<%= i %>" class="<%= i === pagina ? 'active' : '' %>"><%= i %></a>
-                <% } %>
-                
-                <% if (pagina < totalPaginas) { %>
-                    <a href="?pagina=<%= pagina + 1 %>">Siguiente &raquo;</a>
-                <% } %>
-            </div>
-        <% } %>
-
-
-        <br>
-        
-        
-        
-    </main>
+        <!-- Paginación -->
+        <div class="pagination">
+            <% if (pagina > 1) { %>
+                <a href="/productos?pagina=<%= pagina - 1 %>">Anterior</a>
+            <% } %>
     
-
+            <% for (let i = 1; i <= totalPaginas; i++) { %>
+                <a href="/productos?pagina=<%= i %>" class="<%= pagina === i ? 'active' : '' %>"><%= i %></a>
+            <% } %>
+    
+            <% if (pagina < totalPaginas) { %>
+                <a href="/productos?pagina=<%= pagina + 1 %>">Siguiente</a>
+            <% } %>
+        </div>
+    </main>
+    <br
+    
     <!-- Pie de página -->
     <footer>
         <p>&copy; 2024 Representaciones Scaleh. Todos los derechos reservados.</p>

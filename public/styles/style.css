@@ -112,6 +112,11 @@ nav .search_box input{
     width: 350px;
 }
 
+nav .search_box .fa-search {
+    /* color: white; Color del icono */
+    font-size: 18px;
+}
+
 nav .search_box span{
     color: maroon;
     font-size: 20px;
@@ -136,26 +141,18 @@ nav .search_box span::after{
     transition: 0.3s;
 }
 
-nav .search_box span:hover:after{
-width: 100%;
+nav .search-bar span:hover::after {
+    width: 100%;
 }
 
-nav .bar {
-    position:relative;
-    margin: auto;
-    display: none;
-}
-
-nav.bar span{
-    position: absolute;
-    color: #fff;
-    font-size: 35px;
-}
 
 input[type="checkbox"]{ 
 -webkit-appearance: none;
 display: none;
 }
+
+
+/* Aquí inicia la media */
 
 @media screen and (max-width:1250px) {
     nav{
@@ -166,16 +163,8 @@ display: none;
         display: inline-block;
         padding: 15px 30px;
     }
-    nav .search_box{
-        width: 100%;
-        display: inline-flex;
-        justify-content: center;
-        margin-bottom: 15px;
-    }
-    nav .search_box{
-        width: 90%;
-    }
-    nav ol{
+
+    nav ol {
         display: flex;
         flex-direction: column;
         background: #fff;
@@ -183,12 +172,12 @@ display: none;
         visibility: hidden;
         transition: 0.3s;
     }
-    nav ol li{
+    nav ol li {
         text-align: center;
         transition: 0.3s 0.1s all;
         opacity: 0;
     }
-    nav ol li a{
+    nav ol li a {
         color: #7b2424;
         font-size: 28px;
         padding: 25px;
@@ -196,58 +185,57 @@ display: none;
     }
 
     nav ol li:nth-child(1){
-        transform: translateX(-150px);;
+        transform: translateX(-150px);
     }
     nav ol li:nth-child(2){
-        transform: translateX(-200px);;
+        transform: translateX(-200px);
     }
     nav ol li:nth-child(3){
-        transform: translateX(-250px);;
+        transform: translateX(-250px);
     }
     nav ol li:nth-child(4){
-        transform: translateX(-300px);;
+        transform: translateX(-300px);
     }
 
-    nav .bar{
+    nav .bar {
         display: block;
         position: absolute;
         top: 20px;
         right: 80px;
         cursor: pointer;
     }
-    nav .bar #times{
+    nav .bar #times {
         display: none;
-    
     }
-    
-    #check:checked ~ nav .bar #times{
+
+    #check:checked ~ nav .bar #times {
         display: block;
     }
 
-    #check:checked ~ nav .bar #bars{
-        display: none;    
+    #check:checked ~ nav .bar #bars {
+        display: none;
     }
-    #check:checked ~ nav ol{
-      visibility: visible;
-      height: 465px;
+
+    #check:checked ~ nav ol {
+        visibility: visible;
+        height: 465px;
     }
-    
+
     #check:checked ~ nav ol li:nth-child(1),
     #check:checked ~ nav ol li:nth-child(2),
     #check:checked ~ nav ol li:nth-child(3),
-    #check:checked ~ nav ol li:nth-child(4){
+    #check:checked ~ nav ol li:nth-child(4) {
         transform: translateX(0);
         opacity: 1;
     }
 
-    
     nav ol li ul {
         position: relative;
         width: 100%;
         margin-top: 0;
         background: orange;
-        border-radius: 0; 
-        box-shadow: none; 
+        border-radius: 0;
+        box-shadow: none;
     }
 
     nav ol li ul li a {
@@ -260,6 +248,17 @@ display: none;
         color: #0a5071;
     }
 }
+
+@media screen and (max-width: 768px) {
+    nav .search_box input {
+        width: 180px; /* Ajuste del tamaño del input para pantallas pequeñas */
+    }
+
+    nav .search_box input:focus {
+        width: 250px; /* Ajuste cuando el input tiene focus */
+    }
+}
+
 
 /* Aquí termina la media */
 
@@ -337,47 +336,188 @@ main button:hover {
     background: #005f6b;
 }
 
-
-.container{
+/* Contenedor principal */
+.container {
     width: 100%;
-    height: 600px;
+    min-height: 600px;
     background-color: lightgray;
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;  /* Espacio interior */
+    margin: 0 10%;  /* Espacio en los lados */
+    box-sizing: border-box;
 }
 
+/* Catálogo de productos */
 .product-catalog {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    width: 100%;
+    max-width: 1200px;  /* Limitar el ancho máximo */
 }
 
+/* Filas de productos */
 .product-row {
     display: flex;
     justify-content: space-between;
+    gap: 20px;
 }
 
+/* Tarjeta de producto */
 .product-card {
-    width: 22%; /* Ajuste para que entren 4 tarjetas por fila */
+    width: 22%;
     padding: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 4px solid #ddd;
+    border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
-    background-color: #f9f9f9;
+    background-color: white;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin: 0 18px;  /* Márgenes laterales entre tarjetas */
 }
 
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Imagen del producto */
+.product-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    object-fit: cover;
+}
+
+/* Títulos y descripciones */
 .product-card h2 {
     font-size: 1.2em;
     margin-bottom: 10px;
+    color: #333;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .product-card p {
-    font-size: 1em;
+    font-size: 0.95em;
     margin: 5px 0;
+    color: #666;
 }
 
-img{
-    align-items: center;
-    justify-content: center;
+/* Botón de acción */
+.product-card button {
+    padding: 10px 15px;
+    background-color: #FF7F32;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.product-card button:hover {
+    background-color: #e66b29;
+    transform: scale(1.05); /* Slightly increase scale on hover */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+}
+
+/* Diseño responsive */
+/* Diseño responsivo para las tarjetas de productos */
+@media (max-width: 1250px) {
+    .product-row {
+        flex-wrap: wrap; /* Permite que las tarjetas se acomoden en múltiples filas */
+        justify-content: center; /* Centra las tarjetas */
+    }
+
+    .product-card {
+        width: 45%; /* Las tarjetas ocupan casi la mitad de la fila */
+        margin: 10px 5px; /* Ajusta los márgenes para evitar solapamiento */
+    }
+
+    .product-card h2 {
+        font-size: 1em; /* Reduce el tamaño del título */
+    }
+
+    .product-card p {
+        font-size: 0.9em; /* Reduce el tamaño de la descripción */
+    }
+}
+
+@media (max-width: 768px) {
+    .product-row {
+        flex-direction: column; /* Las tarjetas se apilan verticalmente */
+        align-items: center; /* Centra las tarjetas */
+    }
+
+    .product-card {
+        width: 90%; /* Ajusta las tarjetas para ocupar el 90% del ancho */
+        max-width: 400px; /* Limita el ancho máximo para evitar tarjetas demasiado grandes */
+        margin: 10px 0; /* Añade separación entre tarjetas */
+    }
+
+    .product-card img {
+        height: 200px; /* Establece una altura fija para las imágenes */
+        object-fit: cover; /* Asegura que las imágenes mantengan proporciones */
+    }
+
+    .product-card h2 {
+        font-size: 1.2em; /* Ajusta el tamaño del título */
+        word-wrap: break-word; /* Permite que los textos largos se ajusten */
+    }
+
+    .product-card button {
+        padding: 10px 20px; /* Aumenta el área del botón para dispositivos táctiles */
+        font-size: 1em; /* Ajusta el tamaño del texto del botón */
+    }
+}
+
+
+
+/* Paginación */
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.pagination a {
+    display: inline-block;
+    margin: 0 8px;
+    padding: 10px 20px;
+    background-color: #f4f4f4;
+    color: #333;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.pagination a:hover {
+    background-color: #FF7F32;
+    color: white;
+    transform: scale(1.1);
+}
+
+.pagination a.active {
+    background-color: #FF7F32;
+    color: white;
+    font-weight: bold;
+}
+
+.pagination a:disabled {
+    background-color: #ccc;
+    color: #666;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.pagination a:disabled:hover {
+    background-color: #ccc;
 }
