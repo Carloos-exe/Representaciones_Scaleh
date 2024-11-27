@@ -14,6 +14,10 @@ const perfilRoutes = require('./routes/perfil');
 const carritoRoutes = require('./routes/carrito'); // Nueva ruta para el carrito
 const buscarRoutes = require('./routes/productos/buscarProducto')
 const clientesRoutes = require('./routes/clientes/clientes');
+// Asegúrate de que la ruta está bien configurada
+const loginRoutes = require('./routes/registrate/login'); // Importa la ruta del login
+
+
 
 
 
@@ -63,6 +67,7 @@ app.use('/admin', crud);
 app.use('/carrito', carritoRoutes);
 app.use('/buscar', buscarRoutes);
 app.use('/admin/clientes', clientesRoutes);  
+app.use('/login', loginRoutes); // Configura la ruta para el login
 
 
 
