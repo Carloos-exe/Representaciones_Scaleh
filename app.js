@@ -117,10 +117,6 @@ app.post('/login', async (req, res) => {
 });
 
 
-// Ruta GET para el login (formulario de login)
-app.get('/login', (req, res) => {
-    res.render('login');
-});
 
 // Ruta para ver el perfil
 app.get('/perfil', isAuthenticated, async (req, res) => {
