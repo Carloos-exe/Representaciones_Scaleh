@@ -14,6 +14,10 @@ const perfilRoutes = require('./routes/perfil');
 const carritoRoutes = require('./routes/carrito'); // Nueva ruta para el carrito
 const buscarRoutes = require('./routes/productos/buscarProducto')
 const clientesRoutes = require('./routes/clientes/clientes');
+const redis = require('redis');
+const client = redis.createClient();
+
+
 
 
 
@@ -47,13 +51,11 @@ process.on('unhandledRejection', (error) => {
   
 // Configuración de express-session
 app.use(session({
-    secret: 'tu-clave-secreta',
+    store: new RedisStore({ client }),  // Usando Redis para almacenar las sesiones
+    secret: 'tu_clave_secreta',
     resave: false,
     saveUninitialized: true,
-    cookie: {
-        secure: process.env.NODE_ENV === 'production', // Asegúrate de usar HTTPS en producción
-        maxAge: 1000 * 60 * 60 * 24 // 1 día
-    }
+    cookie: { secure: true }  // Cambia a true si usas HTTPS
 }));
 
 // Rutas
