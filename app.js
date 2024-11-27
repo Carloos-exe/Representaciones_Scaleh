@@ -63,6 +63,9 @@ app.use('/perfil', perfilRoutes);
 app.use('/carrito', carritoRoutes);
 app.use('/buscar', buscarRoutes);
 app.use('/admin/clientes', clientesRoutes);  
+app.use((req, res) => {
+    res.status(404).send('<h1>404 - Página No Encontrada</h1>');
+});
 
 
 
