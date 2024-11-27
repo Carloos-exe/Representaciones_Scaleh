@@ -11,49 +11,23 @@ const productosRoutes = require('./routes/productos/productos');
 const registroRoutes = require('./routes/registrate/registrate');
 const crud = require('./routes/productos/crud');
 const perfilRoutes = require('./routes/perfil');
-const carritoRoutes = require('./routes/carrito');
-const buscarRoutes = require('./routes/productos/buscarProducto');
+const carritoRoutes = require('./routes/carrito'); // Nueva ruta para el carrito
+const buscarRoutes = require('./routes/productos/buscarProducto')
 const clientesRoutes = require('./routes/clientes/clientes');
 
-// Importación de Redis y connect-redis
-const Redis = require('redis');
-const RedisStore = require('connect-redis').default;
 
-// Crear la aplicación Express
+
 const app = express();
-
-// Crear el cliente de Redis
-const redisClient = Redis.createClient({
-    url: process.env.REDIS_URL, // Usar la variable de entorno
-});
-
-redisClient.on('error', (err) => console.error('Error en Redis:', err));
-redisClient.connect().catch(console.error);
-
-
-
-
-// Configuración de express-session con RedisStore
-app.use(session({
-    store: new RedisStore({ client: redisClient }),
-    secret: 'your-secret-key', // Cambia esto por una clave segura
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        secure: process.env.NODE_ENV === 'production', // Segura en producción (HTTPS)
-        httpOnly: true,
-        maxAge: 1000 * 60 * 60, // 1 hora
-    },
-}));
 
 // Configuraciones
 app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'ejs');
 app.set('views', [
-    path.join(__dirname, 'views/principal'),
-    path.join(__dirname, 'views/forms'),
+    path.join(__dirname, 'views/principal'), 
+    path.join(__dirname, 'views/forms'), 
     path.join(__dirname, 'views/admin')
 ]);
+
 
 // Middlewares
 app.use(express.urlencoded({ extended: true }));
@@ -67,7 +41,19 @@ app.use(helmet({
 
 process.on('unhandledRejection', (error) => {
     console.error('Unhandled promise rejection:', error);
-});
+  });
+
+  
+// Configuración de express-session
+app.use(session({
+    secret: 'tu-clave-secreta',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: process.env.NODE_ENV === 'production', // Asegúrate de usar HTTPS en producción
+        maxAge: 1000 * 60 * 60 * 24 // 1 día
+    }
+}));
 
 // Rutas
 app.use('/productos', productosRoutes);
@@ -76,11 +62,14 @@ app.use('/admin', crud);
 app.use('/perfil', perfilRoutes);
 app.use('/carrito', carritoRoutes);
 app.use('/buscar', buscarRoutes);
-app.use('/admin/clientes', clientesRoutes);
+app.use('/admin/clientes', clientesRoutes);  
+
+
 
 // Ruta para el inicio de sesión (POST)
 app.post('/login', async (req, res) => {
     const { correo, contraseña } = req.body;
+
     try {
         if (!correo || !contraseña) {
             return res.status(400).send({ message: 'Correo electrónico y contraseña son requeridos.' });
@@ -110,12 +99,13 @@ app.post('/login', async (req, res) => {
             }
             req.session.userId = usuario[0].idUsuarios;
             req.session.userName = usuario[0].Nombre;
-            req.session.userRol = usuario[0].userRol;
+            req.session.userRol = usuario[0].userRol; // Guardar el rol en la sesión
 
+            // Redirigir según el rol del usuario
             if (req.session.userRol === 'admin') {
-                return res.redirect('/admin');
+                return res.redirect('/admin');  // Redirige a /admin para el administrador
             } else {
-                return res.redirect('/perfil');
+                return res.redirect('/perfil');  // Redirige al perfil para otros usuarios
             }
         });
     } catch (error) {
