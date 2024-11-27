@@ -169,6 +169,9 @@ app.post('/perfil/editar', isAuthenticated, async (req, res) => {
     }
 });
 
+app.get('/login', (req, res) => {
+    res.render('login');
+});
 // Página de inicio
 app.get('/', (req, res) => res.render('index'));
 
