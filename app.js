@@ -124,10 +124,124 @@ app.post('/login', async (req, res) => {
     }
 });
 
+// Ruta para ver el perfil
+app.get('/perfil', isAuthenticated, async (req, res) => {
+    try {
+        const [usuario] = await db.execute(
+            `SELECT u.idUsuarios, p.Nombre, p.Apellido, p.Telefono, p.Correo 
+             FROM usuarios u 
+             JOIN personas p ON u.idPersona = p.idPersona
+             WHERE u.idUsuarios = ?`, [req.session.userId]
+        );
+
+        if (usuario.length > 0) {
+            res.render('perfil', { usuario: usuario[0], message: req.flash('message') });
+        } else {
+            res.redirect('/login');
+        }
+    } catch (error) {
+        console.error('Error al obtener datos del perfil:', error);
+        res.status(500).send('Error al cargar el perfil');
+    }
+});
+
+
+// Ruta para editar el perfil (POST)
+app.post('/perfil/editar', isAuthenticated, async (req, res) => {
+    const { nombre, apellido, telefono, correo } = req.body;
+    try {
+        // Validación del correo electrónico
+        if (!validator.isEmail(correo)) {
+            req.flash('message', { type: 'alert-danger', text: 'Correo electrónico inválido.' });
+            return res.redirect('/perfil');
+        }
+
+        // Validación del teléfono
+        if (!validator.isMobilePhone(telefono, 'es-MX')) {
+            req.flash('message', { type: 'alert-danger', text: 'Teléfono inválido.' });
+            return res.redirect('/perfil');
+        }
+
+        // Actualizar los datos del perfil en la base de datos
+        await db.execute(
+            `UPDATE personas SET Nombre = ?, Apellido = ?, Telefono = ?, Correo = ? 
+             WHERE idPersona = (SELECT idPersona FROM usuarios WHERE idUsuarios = ?)` ,
+            [nombre, apellido, telefono, correo, req.session.userId]
+        );
+
+        req.flash('message', { type: 'alert-success', text: 'Perfil actualizado correctamente.' });
+        res.redirect('/perfil');
+    } catch (error) {
+        console.error('Error al actualizar el perfil:', error);
+        req.flash('message', { type: 'alert-danger', text: 'Error al actualizar el perfil. Inténtalo de nuevo.' });
+        res.redirect('/perfil');
+    }
+});
+
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+
+// Página de inicio
+app.get('/', (req, res) => res.render('index'));
+
+const { ensureRole } = require('./middleware/roles');
+
+// Rutas de administración protegidas
+app.get('/admin', isAuthenticated, ensureRole(['admin', 'trabajador']), async (req, res) => {
+    try {
+        const [productos] = await db.execute(
+            `SELECT idProducto, nombreProducto AS nombre, descripcionProducto AS descripcion, 
+                    CAST(precio AS DECIMAL(10,2)) AS precio, imagenUrl 
+             FROM productos`
+        );
+        res.render('dashboard',  { productos: JSON.stringify(productos) });
+    } catch (error) {
+        console.error('Error al obtener productos:', error);
+        res.status(500).send('Error al obtener productos');
+    }
+});
+
+
+
+app.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            console.error('Error al cerrar sesión:', err);
+            return res.status(500).send({ message: 'Error al cerrar sesión.' });
+        }
+        res.clearCookie('connect.sid'); // Limpia la cookie de sesión
+        res.redirect('/login'); // Redirigir al login
+    });
+});
+
+app.get('/admin/salir', (req, res) => {
+    // Verifica si el usuario tiene el rol de administrador
+    if (req.session.userRol === 'admin') {
+        // Cierra la sesión de administrador
+        req.session.destroy(err => {
+            if (err) {
+                console.error('Error al cerrar sesión de administrador:', err);
+                return res.status(500).send({ message: 'Error al cerrar sesión.' });
+            }
+            res.clearCookie('connect.sid'); // Limpia la cookie de sesión
+            res.redirect('/login'); // Redirige al login
+        });
+    } else {
+        // Si el usuario no es administrador, redirige
+        res.status(403).send('Acceso no autorizado');
+    }
+});
+
 // Ruta GET para el login
 app.get('/login', (req, res) => {
     res.render('login');
 });
+
+app.get('/registrate', (req, res) => res.render('registrate'));
+
+// Ruta para descuentos
+app.get('/descuentos', (req, res) => res.render('descuentos'));
 
 // Página de inicio
 app.get('/', (req, res) => res.render('index'));
