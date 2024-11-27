@@ -15,30 +15,44 @@ const carritoRoutes = require('./routes/carrito');
 const buscarRoutes = require('./routes/productos/buscarProducto');
 const clientesRoutes = require('./routes/clientes/clientes');
 
-// Importación de Redis y connect-redis (versión 4.x+)
+// Importación de Redis y connect-redis
 const Redis = require('redis');
 const RedisStore = require('connect-redis').default;
 
+// Crear la aplicación Express
 const app = express();
 
 // Crear el cliente de Redis
 const redisClient = Redis.createClient({
-    url: 'redis://localhost:6379',
-  });
+    url: process.env.REDIS_URL, // Usar la variable de entorno
+});
 
-  redisClient.on('error', (err) => console.error('Error en Redis:', err));
-  redisClient.connect().catch(console.error);
+redisClient.on('error', (err) => console.error('Error en Redis:', err));
+redisClient.connect().catch(console.error);
 
-// Configuración de express-session con RedisStore (versión 4.x+)
-// const RedisStore = connectRedis(session);
+
+
+
+// Configuración de express-session con RedisStore
+app.use(session({
+    store: new RedisStore({ client: redisClient }),
+    secret: 'your-secret-key', // Cambia esto por una clave segura
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: process.env.NODE_ENV === 'production', // Segura en producción (HTTPS)
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60, // 1 hora
+    },
+}));
 
 // Configuraciones
 app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'ejs');
 app.set('views', [
-  path.join(__dirname, 'views/principal'),
-  path.join(__dirname, 'views/forms'),
-  path.join(__dirname, 'views/admin')
+    path.join(__dirname, 'views/principal'),
+    path.join(__dirname, 'views/forms'),
+    path.join(__dirname, 'views/admin')
 ]);
 
 // Middlewares
@@ -47,31 +61,13 @@ app.use(express.json());
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(helmet({
-  contentSecurityPolicy: false,
-  crossOriginEmbedderPolicy: false
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false
 }));
 
 process.on('unhandledRejection', (error) => {
-  console.error('Unhandled promise rejection:', error);
+    console.error('Unhandled promise rejection:', error);
 });
-
-
-// Configuración de express-session con RedisStore
-app.use(session({
-    store: new RedisStore({ client: redisClient }), // Vincula el cliente
-    secret: 'your-secret-key', // Cambia esto a una clave segura
-    resave: false,             // No guarda la sesión si no hay cambios
-    saveUninitialized: false,  // No guarda sesiones vacías
-    cookie: {
-        secure: false,        // Cambiar a true si usas HTTPS
-        httpOnly: true,       // La cookie no estará disponible para JS
-        maxAge: 1000 * 60 * 60, // Duración de la cookie: 1 hora
-    },
-}));
-
-
-// Aquí van las demás rutas y lógica de la app
-
 
 // Rutas
 app.use('/productos', productosRoutes);
@@ -80,14 +76,11 @@ app.use('/admin', crud);
 app.use('/perfil', perfilRoutes);
 app.use('/carrito', carritoRoutes);
 app.use('/buscar', buscarRoutes);
-app.use('/admin/clientes', clientesRoutes);  
-
-
+app.use('/admin/clientes', clientesRoutes);
 
 // Ruta para el inicio de sesión (POST)
 app.post('/login', async (req, res) => {
     const { correo, contraseña } = req.body;
-
     try {
         if (!correo || !contraseña) {
             return res.status(400).send({ message: 'Correo electrónico y contraseña son requeridos.' });
@@ -117,13 +110,12 @@ app.post('/login', async (req, res) => {
             }
             req.session.userId = usuario[0].idUsuarios;
             req.session.userName = usuario[0].Nombre;
-            req.session.userRol = usuario[0].userRol; // Guardar el rol en la sesión
+            req.session.userRol = usuario[0].userRol;
 
-            // Redirigir según el rol del usuario
             if (req.session.userRol === 'admin') {
-                return res.redirect('/admin');  // Redirige a /admin para el administrador
+                return res.redirect('/admin');
             } else {
-                return res.redirect('/perfil');  // Redirige al perfil para otros usuarios
+                return res.redirect('/perfil');
             }
         });
     } catch (error) {
@@ -132,8 +124,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-
-// Ruta GET para el login (formulario de login)
+// Ruta GET para el login
 app.get('/login', (req, res) => {
     res.render('login');
 });
@@ -141,122 +132,11 @@ app.get('/login', (req, res) => {
 // Página de inicio
 app.get('/', (req, res) => res.render('index'));
 
-
-
-// Rutas de administración
-const { ensureRole } = require('./middleware/roles');
-
-// Rutas de administración protegidas
-app.get('/admin', isAuthenticated, ensureRole(['admin', 'trabajador']), async (req, res) => {
-    try {
-        const [productos] = await db.execute(
-            `SELECT idProducto, nombreProducto AS nombre, descripcionProducto AS descripcion, 
-                    CAST(precio AS DECIMAL(10,2)) AS precio, imagenUrl 
-             FROM productos`
-        );
-        res.render('dashboard',  { productos: JSON.stringify(productos) });
-    } catch (error) {
-        console.error('Error al obtener productos:', error);
-        res.status(500).send('Error al obtener productos');
-    }
-});
-
-
-
-// Ruta para ver el perfil
-app.get('/perfil', isAuthenticated, async (req, res) => {
-    try {
-        const [usuario] = await db.execute(
-            `SELECT u.idUsuarios, p.Nombre, p.Apellido, p.Telefono, p.Correo 
-             FROM usuarios u 
-             JOIN personas p ON u.idPersona = p.idPersona
-             WHERE u.idUsuarios = ?`, [req.session.userId]
-        );
-
-        if (usuario.length > 0) {
-            res.render('perfil', { usuario: usuario[0], message: req.flash('message') });
-        } else {
-            res.redirect('/login');
-        }
-    } catch (error) {
-        console.error('Error al obtener datos del perfil:', error);
-        res.status(500).send('Error al cargar el perfil');
-    }
-});
-
-
-// Ruta para editar el perfil (POST)
-app.post('/perfil/editar', isAuthenticated, async (req, res) => {
-    const { nombre, apellido, telefono, correo } = req.body;
-    try {
-        // Validación del correo electrónico
-        if (!validator.isEmail(correo)) {
-            req.flash('message', { type: 'alert-danger', text: 'Correo electrónico inválido.' });
-            return res.redirect('/perfil');
-        }
-
-        // Validación del teléfono
-        if (!validator.isMobilePhone(telefono, 'es-MX')) {
-            req.flash('message', { type: 'alert-danger', text: 'Teléfono inválido.' });
-            return res.redirect('/perfil');
-        }
-
-        // Actualizar los datos del perfil en la base de datos
-        await db.execute(
-            `UPDATE personas SET Nombre = ?, Apellido = ?, Telefono = ?, Correo = ? 
-             WHERE idPersona = (SELECT idPersona FROM usuarios WHERE idUsuarios = ?)` ,
-            [nombre, apellido, telefono, correo, req.session.userId]
-        );
-
-        req.flash('message', { type: 'alert-success', text: 'Perfil actualizado correctamente.' });
-        res.redirect('/perfil');
-    } catch (error) {
-        console.error('Error al actualizar el perfil:', error);
-        req.flash('message', { type: 'alert-danger', text: 'Error al actualizar el perfil. Inténtalo de nuevo.' });
-        res.redirect('/perfil');
-    }
-});
-
-
-// Ruta para cerrar sesión
-app.get('/logout', (req, res) => {
-    req.session.destroy(err => {
-        if (err) {
-            console.error('Error al cerrar sesión:', err);
-            return res.status(500).send({ message: 'Error al cerrar sesión.' });
-        }
-        res.clearCookie('connect.sid'); // Limpia la cookie de sesión
-        res.redirect('/login'); // Redirigir al login
-    });
-});
-
-app.get('/admin/salir', (req, res) => {
-    // Verifica si el usuario tiene el rol de administrador
-    if (req.session.userRol === 'admin') {
-        // Cierra la sesión de administrador
-        req.session.destroy(err => {
-            if (err) {
-                console.error('Error al cerrar sesión de administrador:', err);
-                return res.status(500).send({ message: 'Error al cerrar sesión.' });
-            }
-            res.clearCookie('connect.sid'); // Limpia la cookie de sesión
-            res.redirect('/login'); // Redirige al login
-        });
-    } else {
-        // Si el usuario no es administrador, redirige
-        res.status(403).send('Acceso no autorizado');
-    }
-});
-
-
-
-// Ruta para registrarse
-app.get('/registrate', (req, res) => res.render('registrate'));
-
-// Ruta para descuentos
-app.get('/descuentos', (req, res) => res.render('descuentos'));
-
 // Middleware global de manejo de errores
+app.use((req, res) => {
+    res.status(404).render('404', { message: 'Página no encontrada' });
+});
+
 app.use((err, req, res, next) => {
     console.error(err.stack);
     const status = err.status || 500;
@@ -266,7 +146,5 @@ app.use((err, req, res, next) => {
     res.status(status).send({ error: { message, status } });
 });
 
-// Inicia el servidor
-app.listen(app.get('port'), () => {
-    console.log(`Servidor corriendo en el puerto ${app.get('port')}`);
-});
+// Exportar la aplicación para Vercel
+module.exports = app;
