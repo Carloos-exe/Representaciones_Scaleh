@@ -1,4 +1,0 @@
-deployment:
-  tasks:
-    - export DEPLOYPATH=/home/scalehco/public_html  # Ruta personalizada
-    - /bin/cp -R * $DEPLOYPATH  # Copia todos los archivos del repositorio a esa carpeta

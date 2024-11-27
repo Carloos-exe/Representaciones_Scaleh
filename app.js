@@ -14,9 +14,6 @@ const perfilRoutes = require('./routes/perfil');
 const carritoRoutes = require('./routes/carrito'); // Nueva ruta para el carrito
 const buscarRoutes = require('./routes/productos/buscarProducto')
 const clientesRoutes = require('./routes/clientes/clientes');
-// Asegúrate de que la ruta está bien configurada
-const loginRoutes = require('./routes/registrate/login'); // Importa la ruta del login
-
 
 
 
@@ -67,7 +64,6 @@ app.use('/admin', crud);
 app.use('/carrito', carritoRoutes);
 app.use('/buscar', buscarRoutes);
 app.use('/admin/clientes', clientesRoutes);  
-app.use('/login', loginRoutes); // Configura la ruta para el login
 
 
 
@@ -118,6 +114,12 @@ app.post('/login', async (req, res) => {
         console.error('Error al iniciar sesión:', error);
         res.status(500).send({ message: 'Error interno del servidor.' });
     }
+});
+
+
+// Ruta GET para el login (formulario de login)
+app.get('/login', (req, res) => {
+    res.render('login');
 });
 
 // Ruta para ver el perfil
@@ -174,9 +176,6 @@ app.post('/perfil/editar', isAuthenticated, async (req, res) => {
     }
 });
 
-app.get('/login', (req, res) => {
-    res.render('login');
-});
 // Página de inicio
 app.get('/', (req, res) => res.render('index'));
 
