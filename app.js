@@ -58,8 +58,8 @@ app.use(session({
 // Rutas
 app.use('/productos', productosRoutes);
 app.use('/registrate', registroRoutes);
-app.use('/admin', crud);
 app.use('/perfil', perfilRoutes);
+app.use('/admin', crud);
 app.use('/carrito', carritoRoutes);
 app.use('/buscar', buscarRoutes);
 app.use('/admin/clientes', clientesRoutes);  
@@ -169,10 +169,6 @@ app.post('/perfil/editar', isAuthenticated, async (req, res) => {
         req.flash('message', { type: 'alert-danger', text: 'Error al actualizar el perfil. Inténtalo de nuevo.' });
         res.redirect('/perfil');
     }
-});
-
-app.get('/login', (req, res) => {
-    res.render('login');
 });
 
 // Página de inicio
