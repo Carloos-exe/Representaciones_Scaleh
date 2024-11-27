@@ -63,9 +63,7 @@ app.use('/admin', crud);
 app.use('/carrito', carritoRoutes);
 app.use('/buscar', buscarRoutes);
 app.use('/admin/clientes', clientesRoutes);  
-app.use((req, res) => {
-    res.status(404).send('<h1>404 - Página No Encontrada</h1>');
-});
+
 
 
 
@@ -247,6 +245,10 @@ app.use((err, req, res, next) => {
         ? 'Ocurrió un error, por favor intenta más tarde.' 
         : err.message;
     res.status(status).send({ error: { message, status } });
+});
+
+app.use((req, res) => {
+    res.status(404).send('<h1>404 - Página No Encontrada</h1>');
 });
 
 // Exportar la aplicación para Vercel
