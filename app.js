@@ -11,28 +11,49 @@ const productosRoutes = require('./routes/productos/productos');
 const registroRoutes = require('./routes/registrate/registrate');
 const crud = require('./routes/productos/crud');
 const perfilRoutes = require('./routes/perfil');
-const carritoRoutes = require('./routes/carrito'); // Nueva ruta para el carrito
-const buscarRoutes = require('./routes/productos/buscarProducto')
+const carritoRoutes = require('./routes/carrito');
+const buscarRoutes = require('./routes/productos/buscarProducto');
 const clientesRoutes = require('./routes/clientes/clientes');
-const redis = require('redis');
-const client = redis.createClient();
 
+// Importación de Redis y connect-redis
+const Redis = require('redis');
+const RedisStore = require('connect-redis').default;
 
-
-
-
-
+// Crear la aplicación Express
 const app = express();
+
+// Crear el cliente de Redis
+const redisClient = Redis.createClient({
+    url: process.env.REDIS_URL, // Usar la variable de entorno
+});
+
+redisClient.on('error', (err) => console.error('Error en Redis:', err));
+redisClient.connect().catch(console.error);
+
+
+
+
+// Configuración de express-session con RedisStore
+app.use(session({
+    store: new RedisStore({ client: redisClient }),
+    secret: 'your-secret-key', // Cambia esto por una clave segura
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: process.env.NODE_ENV === 'production', // Segura en producción (HTTPS)
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60, // 1 hora
+    },
+}));
 
 // Configuraciones
 app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'ejs');
 app.set('views', [
-    path.join(__dirname, 'views/principal'), 
-    path.join(__dirname, 'views/forms'), 
+    path.join(__dirname, 'views/principal'),
+    path.join(__dirname, 'views/forms'),
     path.join(__dirname, 'views/admin')
 ]);
-
 
 // Middlewares
 app.use(express.urlencoded({ extended: true }));
@@ -46,17 +67,10 @@ app.use(helmet({
 
 process.on('unhandledRejection', (error) => {
     console.error('Unhandled promise rejection:', error);
-  });
+});
 
   
 // Configuración de express-session
-app.use(session({
-    store: new RedisStore({ client }),  // Usando Redis para almacenar las sesiones
-    secret: 'tu_clave_secreta',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: true }  // Cambia a true si usas HTTPS
-}));
 
 // Rutas
 app.use('/productos', productosRoutes);
