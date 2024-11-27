@@ -17,19 +17,19 @@
             line-height: 1.6;
             scroll-behavior: smooth;
         }
-
+    
         a {
             text-decoration: none;
         }
-
-        *{
+    
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
         }
-        
-        nav{
+    
+        nav {
             display: flex;
             width: 100%;
             background: #FF7F32;
@@ -38,103 +38,91 @@
             text-align: center;
             padding: 15px 30px;
         }
-        
-        nav .icon{
+    
+        nav .icon {
             font-size: 30px;
             font-weight: 800;
             color: aliceblue;
             cursor: pointer;
         }
-        
-        nav ol{
+    
+        nav ol {
             display: flex;
             list-style: none;
             margin: auto 0;
         }
-        
-        nav ol li{
-            margin: 0 2px
+    
+        nav ol li {
+            margin: 0 2px;
         }
-        
-        nav ol li a{
+    
+        nav ol li a {
             color: aliceblue;
             font-size: 20px;
             text-decoration: none;
             text-transform: capitalize;
             letter-spacing: 1px;
             padding: 5px 10px;
-        
         }
-        
-        
-        nav ol li:hover a{
+    
+        nav ol li:hover a {
             background: #fff;
             color: #0a5071;
-        
         }
-        
-        /* Para el sub menu de productos*/
+    
+        /* Submenu Styles */
         nav ol li ul {
             display: none;
             position: absolute;
-            background-color: rgba(255, 0, 0, 0.9); /* Fondo rojo semi-transparente */
+            background-color: rgba(255, 0, 0, 0.9);
             padding: 10px;
             margin-top: 10px;
             list-style: none;
-            border-radius: 8px; /* Esquinas redondeadas */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para dar profundidad */
-            transition: all 0.3s ease-in-out; /* Transición suave */
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
         }
-        
+    
         nav ol li:hover ul {
             display: block;
         }
-        
+    
         nav ol li ul li {
-            margin: 10px 0; /* Más espaciado entre las categorías */
+            margin: 10px 0;
         }
-        
+    
         nav ol li ul li a {
             padding: 8px 20px;
             font-size: 18px;
             display: block;
-            border-radius: 4px; /* Esquinas redondeadas */
-            transition: background-color 0.3s ease-in-out; /* Transición suave al hover */
+            border-radius: 4px;
+            transition: background-color 0.3s ease-in-out;
         }
-        
+    
         nav ol li ul li a:hover {
             background-color: #fff;
             color: #0a5071;
         }
-        
-        /* Aquí termina el sub menu de productos*/
-        
-        nav .search_box{
+    
+        /* Search Box */
+        nav .search_box {
             display: flex;
-            margin:auto 0;
-            height: 35px;
-             line-height: 35px; 
-        }
-        
-        nav .search_box{
-            display: flex;
-            margin:auto;
+            margin: auto 0;
             height: 35px;
             line-height: 35px;
         }
-        
-        
-        nav .search_box input{
+    
+        nav .search_box input {
             border: none;
             outline: none;
             background: #fff;
             height: 100%;
-            padding: 0 10 px;
+            padding: 0 10px;
             font-size: 20px;
             width: 350px;
         }
-        
-        nav .search_box span{
+    
+        nav .search_box span {
             color: maroon;
             font-size: 20px;
             background: white;
@@ -144,36 +132,23 @@
             cursor: pointer;
             z-index: 1;
         }
-        
-        
-        nav .search_box span::after{
+    
+        nav .search_box span::after {
             height: 100%;
             width: 0%;
             content: " ";
-            background:orange;
-            position:absolute;
+            background: orange;
+            position: absolute;
             top: 0;
             left: 0;
             z-index: -1;
             transition: 0.3s;
         }
-        
-        nav .search_box span:hover:after{
-        width: 100%;
+    
+        nav .search_box span:hover:after {
+            width: 100%;
         }
-        
-        nav .bar {
-            position:relative;
-            margin: auto;
-            display: none;
-        }
-        
-        nav.bar span{
-            position: absolute;
-            color: #fff;
-            font-size: 35px;
-        }
-
+    
         /* Hero Section with Slideshow */
         .hero {
             position: relative;
@@ -185,7 +160,7 @@
             color: white;
             overflow: hidden;
         }
-
+    
         .hero .slideshow {
             position: absolute;
             top: 0;
@@ -194,7 +169,7 @@
             height: 100%;
             z-index: -1;
         }
-
+    
         .hero .slideshow img {
             position: absolute;
             top: 0;
@@ -205,19 +180,7 @@
             opacity: 0;
             animation: slideShow 15s infinite;
         }
-
-        .hero .slideshow img:nth-child(1) {
-            animation-delay: 0s;
-        }
-
-        .hero .slideshow img:nth-child(2) {
-            animation-delay: 5s;
-        }
-
-        .hero .slideshow img:nth-child(3) {
-            animation-delay: 10s;
-        }
-
+    
         @keyframes slideShow {
             0% { opacity: 0; }
             20% { opacity: 1; }
@@ -225,27 +188,27 @@
             60% { opacity: 0; }
             100% { opacity: 0; }
         }
-
+    
         .hero-content {
             max-width: 600px;
             animation: fadeIn 2s ease;
             padding: 20px;
-            background-color: rgba(0, 0, 0, 0.5); /* Added a dark overlay for text contrast */
+            background-color: rgba(0, 0, 0, 0.5);
             border-radius: 10px;
         }
-
+    
         .hero h1 {
             font-size: 3.5em;
             margin-bottom: 20px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
         }
-
+    
         .hero p {
             font-size: 1.5em;
             margin-bottom: 30px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
         }
-
+    
         .hero button {
             padding: 10px 20px;
             font-size: 1em;
@@ -256,25 +219,25 @@
             cursor: pointer;
             transition: background-color 0.3s, transform 0.3s;
         }
-
+    
         .hero button:hover {
             background-color: #FF7F32;
             color: #fff;
             transform: scale(1.1);
         }
-
+    
         /* Services Section */
         .services {
             padding: 50px 20px;
             text-align: center;
             background-color: #f9f9f9;
         }
-
+    
         .services h2 {
             color: #FF7F32;
             margin-bottom: 20px;
         }
-
+    
         .service-item {
             display: inline-block;
             text-align: left;
@@ -286,17 +249,17 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease;
         }
-
+    
         .service-item i {
             font-size: 2em;
             color: #FF7F32;
             margin-bottom: 10px;
         }
-
+    
         .service-item:hover {
-            transform: translateY(-5px); /* Hover effect */
+            transform: translateY(-5px);
         }
-
+    
         /* Floating WhatsApp Button */
         .whatsapp-btn {
             position: fixed;
@@ -315,11 +278,11 @@
             z-index: 10;
             transition: transform 0.3s;
         }
-
+    
         .whatsapp-btn:hover {
             transform: scale(1.1);
         }
-
+    
         /* Footer */
         footer {
             background-color: #333;
@@ -328,16 +291,16 @@
             text-align: center;
             font-size: 1em;
         }
-
+    
         footer a {
             color: #FF7F32;
             text-decoration: none;
         }
-
+    
         footer a:hover {
             text-decoration: underline;
         }
-
+    
         /* Floating Social Buttons */
         .social-btn {
             position: fixed;
@@ -355,15 +318,92 @@
             z-index: 10;
             transition: transform 0.3s, opacity 0.3s;
         }
-
+    
         .social-btn:hover {
             transform: scale(1.1);
         }
-
+    
         .facebook-btn { bottom: 90px; background-color: #4267B2; }
         .instagram-btn { bottom: 160px; background-color: #C13584; }
         .whatsapp-btn { background-color: #25D366; }
+    
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                padding: 10px 20px;
+            }
+    
+            nav ol {
+                flex-direction: column;
+                align-items: center;
+            }
+    
+            nav ol li {
+                margin: 5px 0;
+            }
+    
+            .hero h1 {
+                font-size: 2.5em;
+            }
+    
+            .hero p {
+                font-size: 1.2em;
+            }
+    
+            .hero button {
+                padding: 8px 15px;
+            }
+    
+            .services {
+                padding: 30px 10px;
+            }
+    
+            .service-item {
+                width: 200px;
+                margin: 10px;
+            }
+    
+            .whatsapp-btn,
+            .social-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2em;
+            }
+        }
+    
+        @media (max-width: 480px) {
+            nav .search_box input {
+                width: 100%;
+                font-size: 18px;
+            }
+    
+            .hero h1 {
+                font-size: 2em;
+            }
+    
+            .hero p {
+                font-size: 1em;
+            }
+    
+            .hero button {
+                padding: 8px 12px;
+            }
+    
+            .service-item {
+                width: 180px;
+                margin: 8px;
+            }
+    
+            .whatsapp-btn,
+            .social-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2em;
+            }
+        }
     </style>
+    
 </head>
 <body>
 
