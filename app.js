@@ -24,7 +24,8 @@ const app = express();
 
 // Crear el cliente de Redis
 const redisClient = Redis.createClient({
-    url: process.env.REDIS_URL, // Usar la variable de entorno
+         url: 'https://adjusted-chicken-46347.upstash.io',
+        token: 'AbULAAIjcDE3YTQ5OGRmMjhkZGE0NDcyYjM3YTBjMWUzNzlmODJjYnAxMA',
 });
 
 redisClient.on('error', (err) => console.error('Error en Redis:', err));
@@ -36,15 +37,16 @@ redisClient.connect().catch(console.error);
 // Configuración de express-session con RedisStore
 app.use(session({
     store: new RedisStore({ client: redisClient }),
-    secret: 'your-secret-key', // Cambia esto por una clave segura
+    secret: process.env.SESSION_SECRET, // Usamos el valor del archivo .env
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: process.env.NODE_ENV === 'production', // Segura en producción (HTTPS)
+        secure: process.env.NODE_ENV === 'production', // Asegura que la cookie solo se use en HTTPS en producción
         httpOnly: true,
         maxAge: 1000 * 60 * 60, // 1 hora
     },
 }));
+
 
 // Configuraciones
 app.set('port', process.env.PORT || 3000);
@@ -116,7 +118,7 @@ app.post('/login', async (req, res) => {
             return res.status(400).json({ error: true, message: 'Correo electrónico o contraseña incorrectos.' });
         }
 
-        // Manejo de sesión
+        // Regeneración de sesión
         req.session.regenerate((err) => {
             if (err) {
                 console.error('Error al regenerar sesión:', err);

@@ -6,12 +6,14 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "build": "echo 'No build step defined' && exit 0"
+    "build": "echo 'No build step defined' && exit 0",
+    "type": "module"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@upstash/redis": "^1.34.3",
     "bcrypt": "^5.1.1",
     "connect-flash": "^0.1.1",
     "connect-redis": "^7.1.1",

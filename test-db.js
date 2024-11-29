@@ -1,33 +1,20 @@
-const mysql = require('mysql2');
+const { Redis } = require('@upstash/redis');
 
-// Crear la conexión a la base de datos
-const connection = mysql.createConnection({
-  host: 'autorack.proxy.rlwy.net',  // Host público
-  user: 'root',
-  password: 'dVUqPIrgSAnrfbVizKFShwlUAvIFuAWm',
-  database: 'representacionesv2',
-  port: 15694  // Puerto de la URL pública
+const redis = new Redis({
+  url: 'https://adjusted-chicken-46347.upstash.io',
+  token: '********',
 });
 
-// Conectar a la base de datos
-connection.connect((err) => {
-  if (err) {
-    console.error('Error connecting to the database:', err);
-    return;
+async function interactuarConRedis() {
+  try {
+    await redis.set('foo', 'bar');
+    console.log('Valor guardado en Redis');
+
+    const data = await redis.get('foo');
+    console.log('Valor recuperado de Redis:', data);
+  } catch (error) {
+    console.error('Error al interactuar con Redis:', error);
   }
-  console.log('Connected to the database');
-  
-  // Ejecutar la consulta para obtener las tablas
-  connection.query('SHOW TABLES', (err, results) => {
-    if (err) {
-      console.error('Error retrieving tables:', err);
-      return;
-    }
-    
-    // Mostrar las tablas en la consola
-    console.log('Tables in database:', results);
-    
-    // Cerrar la conexión después de la consulta
-    connection.end();
-  });
-});
+}
+
+interactuarConRedis();
