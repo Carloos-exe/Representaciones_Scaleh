@@ -150,45 +150,56 @@
         }
     
         /* Hero Section with Slideshow */
-        .hero {
-            position: relative;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            overflow: hidden;
-        }
-    
-        .hero .slideshow {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-    
-        .hero .slideshow img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            animation: slideShow 15s infinite;
-        }
-    
-        @keyframes slideShow {
-            0% { opacity: 0; }
-            20% { opacity: 1; }
-            40% { opacity: 1; }
-            60% { opacity: 0; }
-            100% { opacity: 0; }
-        }
-    
+              /* Hero Section with Slideshow */
+.hero {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    overflow: hidden;
+}
+
+.hero .slideshow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.hero .slideshow img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    animation: slideShow 18s infinite ease-in-out;
+}
+
+/* Mejora de transiciones */
+.hero .slideshow img:nth-child(1) {
+    animation-delay: 0s;
+}
+.hero .slideshow img:nth-child(2) {
+    animation-delay: 6s;
+}
+.hero .slideshow img:nth-child(3) {
+    animation-delay: 12s;
+}
+
+@keyframes slideShow {
+    0% { opacity: 0; transform: scale(1.1); }
+    10% { opacity: 1; transform: scale(1); }
+    30% { opacity: 1; transform: scale(1); }
+    40% { opacity: 0; transform: scale(1.1); }
+    100% { opacity: 0; }
+}
         .hero-content {
             max-width: 600px;
             animation: fadeIn 2s ease;
@@ -421,11 +432,10 @@
     </nav>
 
 
-
     <div class="hero">
         <div class="slideshow">
             <img src="https://ipasa.mx/wp-content/uploads/2023/11/tubo-galvanizado-2-1024x768.webp" alt="Imagen 1">
-            <img src="/img/ferreteria/presentacion1.jpg" alt="Imagen 1">
+            <img src="/img/ferreteria/presentacion1.jpg" alt="Imagen 4">
             <img src="/img/ferreteria/presentacion2.jpg" alt="Imagen 2">
             <img src="/img/ferreteria/presentacion3.jpg" alt="Imagen 3">
         </div>

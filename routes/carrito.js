@@ -3,16 +3,32 @@ const router = express.Router();
 const { isAuthenticated } = require('../middleware/auth'); // Middleware de autenticación
 const db = require('../config/dbConnection'); // Conexión a la base de datos
 
-// Ruta para ver el carrito
-router.get('/', isAuthenticated, (req, res) => {
-    const cart = req.session.cart || [];
-    const total = cart.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+// Ruta para ver el carrito del usuario autenticado
+router.get('/', isAuthenticated, async (req, res) => {
+    try {
+        const userId = req.session.userId;
 
-    // Mostrar mensajes de la sesión
-    const message = req.session.message || null;
-    req.session.message = null;
+        // Consultar el carrito del usuario
+        const [cartItems] = await db.execute(
+            `SELECT c.idCarrito, p.nombreProducto, p.precio, c.cantidad 
+             FROM carrito c
+             JOIN productos p ON c.idProducto = p.idProducto
+             WHERE c.idUsuario = ?`,
+            [userId]
+        );
 
-    res.render('carrito', { cart, total, message });
+        // Calcular el total del carrito
+        const total = cartItems.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+
+        // Mostrar mensajes de la sesión
+        const message = req.session.message || null;
+        req.session.message = null;
+
+        res.render('carrito', { cart: cartItems, total, message });
+    } catch (err) {
+        console.error('Error al obtener el carrito:', err);
+        res.status(500).send('Error interno del servidor');
+    }
 });
 
 // Ruta para agregar un producto al carrito
@@ -20,14 +36,17 @@ router.post('/agregar', isAuthenticated, async (req, res) => {
     const { productoId, cantidad } = req.body;
 
     try {
+        const userId = req.session.userId;
         const cantidadNumerica = parseInt(cantidad, 10);
+
         if (isNaN(cantidadNumerica) || cantidadNumerica <= 0) {
             req.session.message = 'Cantidad inválida';
             return res.redirect('/carrito');
         }
 
+        // Verificar si el producto existe
         const [producto] = await db.execute(
-            `SELECT idProducto, nombreProducto, precio FROM productos WHERE idProducto = ?`,
+            `SELECT idProducto, precio FROM productos WHERE idProducto = ?`,
             [productoId]
         );
 
@@ -36,23 +55,24 @@ router.post('/agregar', isAuthenticated, async (req, res) => {
             return res.redirect('/carrito');
         }
 
-        const item = producto[0];
+        // Verificar si el producto ya está en el carrito
+        const [existingCartItem] = await db.execute(
+            `SELECT idCarrito, cantidad FROM carrito WHERE idUsuario = ? AND idProducto = ?`,
+            [userId, productoId]
+        );
 
-        if (!req.session.cart) {
-            req.session.cart = [];
-        }
-
-        const index = req.session.cart.findIndex(p => p.idProducto === item.idProducto);
-
-        if (index !== -1) {
-            req.session.cart[index].cantidad += cantidadNumerica;
+        if (existingCartItem.length > 0) {
+            // Actualizar cantidad si ya existe
+            await db.execute(
+                `UPDATE carrito SET cantidad = cantidad + ? WHERE idCarrito = ?`,
+                [cantidadNumerica, existingCartItem[0].idCarrito]
+            );
         } else {
-            req.session.cart.push({
-                idProducto: item.idProducto,
-                nombreProducto: item.nombreProducto,
-                precio: parseFloat(item.precio),
-                cantidad: cantidadNumerica
-            });
+            // Insertar nuevo producto en el carrito
+            await db.execute(
+                `INSERT INTO carrito (idUsuario, idProducto, cantidad) VALUES (?, ?, ?)`,
+                [userId, productoId, cantidadNumerica]
+            );
         }
 
         req.session.message = 'Producto agregado al carrito';
@@ -65,17 +85,17 @@ router.post('/agregar', isAuthenticated, async (req, res) => {
 });
 
 // Ruta para eliminar un producto del carrito
-router.post('/eliminar', isAuthenticated, (req, res) => {
+router.post('/eliminar', isAuthenticated, async (req, res) => {
+    const { productoId } = req.body;
+
     try {
-        const { productoId } = req.body;
-        const idNumerico = parseInt(productoId, 10);
+        const userId = req.session.userId;
 
-        if (!req.session.cart || isNaN(idNumerico)) {
-            req.session.message = 'Producto no encontrado';
-            return res.redirect('/carrito');
-        }
-
-        req.session.cart = req.session.cart.filter(item => item.idProducto !== idNumerico);
+        // Eliminar el producto del carrito
+        await db.execute(
+            `DELETE FROM carrito WHERE idUsuario = ? AND idProducto = ?`,
+            [userId, productoId]
+        );
 
         req.session.message = 'Producto eliminado del carrito';
         res.redirect('/carrito');
@@ -87,9 +107,13 @@ router.post('/eliminar', isAuthenticated, (req, res) => {
 });
 
 // Ruta para vaciar el carrito
-router.post('/vaciar', isAuthenticated, (req, res) => {
+router.post('/vaciar', isAuthenticated, async (req, res) => {
     try {
-        req.session.cart = [];
+        const userId = req.session.userId;
+
+        // Eliminar todos los productos del carrito del usuario
+        await db.execute(`DELETE FROM carrito WHERE idUsuario = ?`, [userId]);
+
         req.session.message = 'Carrito vaciado';
         res.redirect('/carrito');
     } catch (err) {
