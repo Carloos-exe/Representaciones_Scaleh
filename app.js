@@ -60,14 +60,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(helmet({
+/*app.use(helmet({
     contentSecurityPolicy: false,
     crossOriginEmbedderPolicy: false
-}));
+}));*/
 
 process.on('unhandledRejection', (error) => {
     console.error('Unhandled promise rejection:', error);
 });
+
 
   
 // Configuración de express-session
@@ -88,12 +89,14 @@ app.use('/admin/clientes', clientesRoutes);
 app.post('/login', async (req, res) => {
     const { correo, contraseña } = req.body;
 
-    try {
-        if (!correo || !contraseña) {
-            return res.status(400).send({ message: 'Correo electrónico y contraseña son requeridos.' });
-        }
+    // Validación de entrada
+    if (!correo || !contraseña) {
+        return res.status(400).json({ error: true, message: 'Correo electrónico y contraseña son requeridos.' });
+    }
 
-        const [usuario] = await db.execute(
+    try {
+        // Consulta a la base de datos
+        const [usuarios] = await db.execute(
             `SELECT u.idUsuarios, u.contraseña, u.userRol, p.Nombre, p.Apellido 
              FROM usuarios u 
              JOIN personas p ON u.idPersona = p.idPersona 
@@ -101,36 +104,40 @@ app.post('/login', async (req, res) => {
             [correo]
         );
 
-        if (usuario.length === 0) {
-            return res.status(400).send({ message: 'Correo electrónico o contraseña incorrectos.' });
+        if (usuarios.length === 0) {
+            return res.status(400).json({ error: true, message: 'Correo electrónico o contraseña incorrectos.' });
         }
 
-        const esCorrecta = await bcrypt.compare(contraseña, usuario[0].contraseña);
+        const usuario = usuarios[0];
+
+        // Verificación de contraseña
+        const esCorrecta = await bcrypt.compare(contraseña, usuario.contraseña);
         if (!esCorrecta) {
-            return res.status(400).send({ message: 'Correo electrónico o contraseña incorrectos.' });
+            return res.status(400).json({ error: true, message: 'Correo electrónico o contraseña incorrectos.' });
         }
 
+        // Manejo de sesión
         req.session.regenerate((err) => {
             if (err) {
                 console.error('Error al regenerar sesión:', err);
-                return res.status(500).send('Error interno del servidor');
+                return res.status(500).json({ error: true, message: 'Error interno del servidor.' });
             }
-            req.session.userId = usuario[0].idUsuarios;
-            req.session.userName = usuario[0].Nombre;
-            req.session.userRol = usuario[0].userRol; // Guardar el rol en la sesión
+
+            // Guardar datos en la sesión
+            req.session.userId = usuario.idUsuarios;
+            req.session.userName = usuario.Nombre;
+            req.session.userRol = usuario.userRol;
 
             // Redirigir según el rol del usuario
-            if (req.session.userRol === 'admin') {
-                return res.redirect('/admin');  // Redirige a /admin para el administrador
-            } else {
-                return res.redirect('/perfil');  // Redirige al perfil para otros usuarios
-            }
+            const redireccion = req.session.userRol === 'admin' ? '/admin' : '/perfil';
+            return res.redirect(redireccion);
         });
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
-        res.status(500).send({ message: 'Error interno del servidor.' });
+        return res.status(500).json({ error: true, message: 'Error interno del servidor.' });
     }
 });
+
 
 
 
