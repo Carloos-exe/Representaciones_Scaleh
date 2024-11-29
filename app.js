@@ -158,6 +158,8 @@ app.post('/login', async (req, res) => {
 });
 
 app.get('/login', (req, res) => {
+    console.log('afectará?');
+    
     res.render('login');
 });
 
@@ -168,6 +170,8 @@ app.get('/login', (req, res) => {
 // Ruta para ver el perfil
 app.get('/perfil', isAuthenticated, async (req, res) => {
     try {
+        console.log('perfil');
+        
         // Consulta los datos del usuario desde la base de datos usando el userId de la sesión
         const [usuario] = await db.execute(
             `SELECT u.idUsuarios, p.Nombre, p.Apellido, p.Telefono, p.Correo 
