@@ -157,15 +157,6 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.get('/login', (req, res) => {
-    console.log('afectará?');
-    
-    res.render('login');
-});
-
-
-
-
 
 // Ruta para ver el perfil
 app.get('/perfil', isAuthenticated, async (req, res) => {
