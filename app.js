@@ -158,6 +158,8 @@ app.post('/login', async (req, res) => {
 });
 
 
+
+
 // Ruta para ver el perfil
 app.get('/perfil', isAuthenticated, async (req, res) => {
     try {
@@ -176,8 +178,8 @@ app.get('/perfil', isAuthenticated, async (req, res) => {
             // Si se encontró al usuario, renderiza la vista 'perfil' pasando los datos del usuario y cualquier mensaje flash
             res.render('perfil', { usuario: usuario[0], message: req.flash('message') });
         } else {
-            console.log('nosencontroñañá');
-            
+           
+         
             // Si no se encuentra al usuario, redirige al login
             res.redirect('/login');
         }
@@ -276,6 +278,9 @@ app.get('/admin/salir', (req, res) => {
 });
 
 // Ruta GET para el login
+app.get('/login', (req, res) => {
+    res.render('login');
+});
 
 app.get('/registrate', (req, res) => res.render('registrate'));
 
