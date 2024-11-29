@@ -157,6 +157,11 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+
+
 
 
 
@@ -273,9 +278,6 @@ app.get('/admin/salir', (req, res) => {
 });
 
 // Ruta GET para el login
-app.get('/login', (req, res) => {
-    res.render('login');
-});
 
 app.get('/registrate', (req, res) => res.render('registrate'));
 
