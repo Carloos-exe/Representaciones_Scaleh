@@ -15,7 +15,7 @@ exports.verPerfil = async (req, res) => {
         if (usuario.length > 0) {
             res.render('perfil', { usuario: usuario[0] });
         } else {
-            console.log("debug");
+            console.log('debugAquí');
             
             res.redirect('/login');
         }

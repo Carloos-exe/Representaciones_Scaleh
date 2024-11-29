@@ -181,6 +181,8 @@ app.get('/perfil', isAuthenticated, async (req, res) => {
             // Si se encontró al usuario, renderiza la vista 'perfil' pasando los datos del usuario y cualquier mensaje flash
             res.render('perfil', { usuario: usuario[0], message: req.flash('message') });
         } else {
+            console.log('nosencontroñañá');
+            
             // Si no se encuentra al usuario, redirige al login
             res.redirect('/login');
         }
@@ -230,6 +232,7 @@ app.post('/perfil/editar', isAuthenticated, async (req, res) => {
 app.get('/', (req, res) => res.render('index'));
 
 const { ensureRole } = require('./middleware/roles');
+const { log } = require('console');
 
 // Rutas de administración protegidas
 app.get('/admin', isAuthenticated, ensureRole(['admin', 'trabajador']), async (req, res) => {
