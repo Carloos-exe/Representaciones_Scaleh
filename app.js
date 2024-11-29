@@ -23,9 +23,11 @@ const RedisStore = require('connect-redis').default;
 const app = express();
 
 // Crear el cliente de Redis
-const redis = new Redis({
-    url: process.env.REDIS_URL,  // Aquí usarás la URL que definiste en el .env
-  });
+const redisClient = Redis.createClient({
+    url: process.env.REDIS_URL, // Usar la variable de entorno
+         url: 'https://adjusted-chicken-46347.upstash.io',
+        token: 'AbULAAIjcDE3YTQ5OGRmMjhkZGE0NDcyYjM3YTBjMWUzNzlmODJjYnAxMA',
+});
   
   redis.set('foo', 'bar')
     .then(() => {
