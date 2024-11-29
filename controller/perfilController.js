@@ -3,6 +3,8 @@ const validator = require('validator'); // Asegúrate de incluir solo una vez el
 
 // Función para ver el perfil
 exports.verPerfil = async (req, res) => {
+    console.log('entra aqui? perfil controller');
+    
     try {
         const userId = req.session.userId;
         const [usuario] = await db.execute(

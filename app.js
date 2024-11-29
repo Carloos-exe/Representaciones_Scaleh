@@ -145,15 +145,20 @@ app.post('/login', async (req, res) => {
                 return res.status(500).json({ error: true, message: 'Error interno del servidor.' });
             }
 
+            console.log('Sesión generada correctamente');
+            
+
             // Guardar datos en la sesión
             req.session.userId = usuario.idUsuarios;
             req.session.userName = usuario.Nombre;
             req.session.userRol = usuario.userRol;
 
             // Redirigir según el rol del usuario
+          
             const redireccion = req.session.userRol === 'admin' ? '/admin' : '/perfil';
-            return res.redirect(redireccion);
             console.log('si llega aqui? app.js final login');
+            return res.redirect(redireccion);
+           
             
         });
     } catch (error) {
