@@ -23,10 +23,20 @@ const RedisStore = require('connect-redis').default;
 const app = express();
 
 // Crear el cliente de Redis
-const redisClient = Redis.createClient({
-         url: 'https://adjusted-chicken-46347.upstash.io',
-        token: 'AbULAAIjcDE3YTQ5OGRmMjhkZGE0NDcyYjM3YTBjMWUzNzlmODJjYnAxMA',
-});
+const redis = new Redis({
+    url: process.env.REDIS_URL,  // Aquí usarás la URL que definiste en el .env
+  });
+  
+  redis.set('foo', 'bar')
+    .then(() => {
+      return redis.get('foo');
+    })
+    .then((data) => {
+      console.log('Valor recuperado de Redis:', data);
+    })
+    .catch((err) => {
+      console.error('Error al interactuar con Redis:', err);
+    });
 
 redisClient.on('error', (err) => console.error('Error en Redis:', err));
 redisClient.connect().catch(console.error);
