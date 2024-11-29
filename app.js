@@ -108,6 +108,7 @@ app.use('/admin/clientes', clientesRoutes);
 app.post('/login', async (req, res) => {
     const { correo, contraseña } = req.body;
 
+
     // Validación de entrada
     if (!correo || !contraseña) {
         return res.status(400).json({ error: true, message: 'Correo electrónico y contraseña son requeridos.' });
@@ -150,6 +151,8 @@ app.post('/login', async (req, res) => {
             // Redirigir según el rol del usuario
             const redireccion = req.session.userRol === 'admin' ? '/admin' : '/perfil';
             return res.redirect(redireccion);
+            console.log('si llega aqui?');
+            
         });
     } catch (error) {
         console.error('Error al iniciar sesión:', error);
@@ -178,6 +181,7 @@ app.get('/perfil', isAuthenticated, async (req, res) => {
             // Si se encontró al usuario, renderiza la vista 'perfil' pasando los datos del usuario y cualquier mensaje flash
             res.render('perfil', { usuario: usuario[0], message: req.flash('message') });
         } else {
+           console.log('error aquí?');
            
          
             // Si no se encuentra al usuario, redirige al login
@@ -190,6 +194,15 @@ app.get('/perfil', isAuthenticated, async (req, res) => {
         res.redirect('/perfil'); // Redirige de nuevo a perfil con un mensaje de error
     }
 });
+
+app.get('/login', (req, res) => {
+    console.log('hola será el herror?');
+    
+    res.render('login');
+});
+
+// Página de inicio
+app.get('/', (req, res) => res.render('index'));
 
 
 
@@ -226,7 +239,6 @@ app.post('/perfil/editar', isAuthenticated, async (req, res) => {
 });
 
 // Página de inicio
-app.get('/', (req, res) => res.render('index'));
 
 const { ensureRole } = require('./middleware/roles');
 const { log } = require('console');
@@ -278,9 +290,6 @@ app.get('/admin/salir', (req, res) => {
 });
 
 // Ruta GET para el login
-app.get('/login', (req, res) => {
-    res.render('login');
-});
 
 app.get('/registrate', (req, res) => res.render('registrate'));
 
