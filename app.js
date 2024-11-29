@@ -15,34 +15,38 @@ const carritoRoutes = require('./routes/carrito');
 const buscarRoutes = require('./routes/productos/buscarProducto');
 const clientesRoutes = require('./routes/clientes/clientes');
 
-// Importación de Redis y connect-redis
-const Redis = require('redis');
+const { createClient } = require('redis');
 const RedisStore = require('connect-redis').default;
 
 // Crear la aplicación Express
 const app = express();
 
-// Crear el cliente de Redis
-const redisClient = Redis.createClient({
-    url: 'rediss://adjusted-chicken-46347.upstash.io', // URL de conexión segura
-    token: 'AbULAAIjcDE3YTQ5OGRmMjhkZGE0NDcyYjM3YTBjMWUzNzlmODJjYnAxMA', // Token de acceso
+// Crear el cliente de Redis  // Usamos la nueva sintaxis de importación
+
+const redisClient = createClient({
+    url: 'rediss://default:AbULAAIjcDE3YTQ5OGRmMjhkZGE0NDcyYjM3YTBjMWUzNzlmODJjYnAxMA@adjusted-chicken-46347.upstash.io:6379'  // Asegúrate de tener la URL correctamente
 });
 
-  
-redisClient.set('foo', 'bar')
-    .then(() => {
-        return redisClient.get('foo');
-    })
-    .then((data) => {
-        console.log('Valor recuperado de Redis:', data);
-    })
-    .catch((err) => {
+redisClient.on('error', (err) => {
+    console.error('Error en Redis:', err);
+});
+
+// Conexión a Redis con async/await
+async function testRedisConnection() {
+    try {
+        await redisClient.connect();  // Establecemos la conexión
+        console.log('Conexión a Redis establecida');
+        
+        // Establecer y obtener un valor de Redis
+        await redisClient.set('foo', 'bar');
+        const value = await redisClient.get('foo');
+        console.log('Valor recuperado de Redis:', value);
+    } catch (err) {
         console.error('Error al interactuar con Redis:', err);
-    });
+    }
+}
 
-
-redisClient.on('error', (err) => console.error('Error en Redis:', err));
-redisClient.connect().catch(console.error);
+testRedisConnection();
 
 
 
