@@ -163,6 +163,7 @@ app.post('/login', async (req, res) => {
 // Ruta para ver el perfil
 app.get('/perfil', isAuthenticated, async (req, res) => {
     try {
+        // Consulta los datos del usuario desde la base de datos usando el userId de la sesión
         const [usuario] = await db.execute(
             `SELECT u.idUsuarios, p.Nombre, p.Apellido, p.Telefono, p.Correo 
              FROM usuarios u 
@@ -170,16 +171,22 @@ app.get('/perfil', isAuthenticated, async (req, res) => {
              WHERE u.idUsuarios = ?`, [req.session.userId]
         );
 
+        // Verifica si se encontró al usuario
         if (usuario.length > 0) {
+            // Si se encontró al usuario, renderiza la vista 'perfil' pasando los datos del usuario y cualquier mensaje flash
             res.render('perfil', { usuario: usuario[0], message: req.flash('message') });
         } else {
+            // Si no se encuentra al usuario, redirige al login
             res.redirect('/login');
         }
     } catch (error) {
+        // Manejo de errores de base de datos o cualquier otro error inesperado
         console.error('Error al obtener datos del perfil:', error);
-        res.status(500).send('Error al cargar el perfil');
+        req.flash('message', 'Hubo un problema al cargar tu perfil. Intenta nuevamente.');
+        res.redirect('/perfil'); // Redirige de nuevo a perfil con un mensaje de error
     }
 });
+
 
 
 // Ruta para editar el perfil (POST)
