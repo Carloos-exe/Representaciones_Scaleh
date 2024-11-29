@@ -11,6 +11,8 @@ router.get('/', (req, res) => {
 
 // Ruta para procesar el inicio de sesión
 router.post('/', (req, res) => {
+    console.log('se utiliza esto?');
+    
     const { correo, contrasena } = req.body;
 
     // Consulta para buscar el correo ingresado en la base de datos

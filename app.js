@@ -106,6 +106,8 @@ app.use('/admin/clientes', clientesRoutes);
 
 // Ruta para el inicio de sesión (POST)
 app.post('/login', async (req, res) => {
+    console.log('sí entra aqui??? app.js');
+    
     const { correo, contraseña } = req.body;
 
 
@@ -151,7 +153,7 @@ app.post('/login', async (req, res) => {
             // Redirigir según el rol del usuario
             const redireccion = req.session.userRol === 'admin' ? '/admin' : '/perfil';
             return res.redirect(redireccion);
-            console.log('si llega aqui?');
+            console.log('si llega aqui? app.js final login');
             
         });
     } catch (error) {
@@ -166,7 +168,7 @@ app.post('/login', async (req, res) => {
 // Ruta para ver el perfil
 app.get('/perfil', isAuthenticated, async (req, res) => {
     try {
-        console.log('perfil');
+        console.log('perfil, llega aqui? que sucedeeee');
         
         // Consulta los datos del usuario desde la base de datos usando el userId de la sesión
         const [usuario] = await db.execute(
@@ -180,8 +182,10 @@ app.get('/perfil', isAuthenticated, async (req, res) => {
         if (usuario.length > 0) {
             // Si se encontró al usuario, renderiza la vista 'perfil' pasando los datos del usuario y cualquier mensaje flash
             res.render('perfil', { usuario: usuario[0], message: req.flash('message') });
+            console.log('if usuario lenght');
+            
         } else {
-           console.log('error aquí?');
+           console.log('error aquí? no se encontro');
            
          
             // Si no se encuentra al usuario, redirige al login
@@ -195,11 +199,7 @@ app.get('/perfil', isAuthenticated, async (req, res) => {
     }
 });
 
-app.get('/login', (req, res) => {
-    console.log('hola será el herror?');
-    
-    res.render('login');
-});
+
 
 // Página de inicio
 app.get('/', (req, res) => res.render('index'));
@@ -290,6 +290,10 @@ app.get('/admin/salir', (req, res) => {
 });
 
 // Ruta GET para el login
+app.get('/login', (req, res) => {
+    console.log('hola será el herror?');
+    res.render('login');
+});
 
 app.get('/registrate', (req, res) => res.render('registrate'));
 
