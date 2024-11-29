@@ -3,3 +3,4 @@ node_modules
 tailwind.config.js
 .vs code
 redisTest.mjs
+test-db.js
