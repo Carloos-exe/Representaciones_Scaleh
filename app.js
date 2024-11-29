@@ -58,7 +58,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: process.env.NODE_ENV === 'production', // Asegura que la cookie solo se use en HTTPS en producción
+        secure: false, // Asegura que la cookie solo se use en HTTPS en producción
         httpOnly: true,
         maxAge: 1000 * 60 * 60, // 1 hora
     },
@@ -150,6 +150,7 @@ app.post('/login', async (req, res) => {
 
             // Guardar datos en la sesión
             req.session.userId = usuario.idUsuarios;
+            console.log('Usuario logueado, ID:', req.session.userId); // Agrega este log            
             req.session.userName = usuario.Nombre;
             req.session.userRol = usuario.userRol;
 
